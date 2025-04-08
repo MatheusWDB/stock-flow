@@ -22,8 +22,8 @@ public class Product implements Serializable {
     private String name;
     private String description;
     private String code;
-    private String costPrice;
-    private String salePrice;
+    private Double costPrice;
+    private Double salePrice;
     private Integer stockQuantity;
 
     @ManyToMany
@@ -33,7 +33,7 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(String name, String description, String code, String costPrice, String salePrice,
+    public Product(String name, String description, String code, Double costPrice, Double salePrice,
             Integer stockQuantity) {
         this.name = name;
         this.description = description;
@@ -71,19 +71,19 @@ public class Product implements Serializable {
         this.code = code;
     }
 
-    public String getCostPrice() {
+    public Double getCostPrice() {
         return costPrice;
     }
 
-    public void setCostPrice(String costPrice) {
+    public void setCostPrice(Double costPrice) {
         this.costPrice = costPrice;
     }
 
-    public String getSalePrice() {
+    public Double getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(String salePrice) {
+    public void setSalePrice(Double salePrice) {
         this.salePrice = salePrice;
     }
 
@@ -95,10 +95,10 @@ public class Product implements Serializable {
         this.stockQuantity = stockQuantity;
     }
 
-    public Set<Long> getCategories() {
-        Set<Long> categories = new HashSet<>();
+    public Set<String> getCategories() {
+        Set<String> categories = new HashSet<>();
         for (Category category : this.categories) {
-            categories.add(category.getCategoryId());
+            categories.add(category.getName());
         }
         return categories;
     }
