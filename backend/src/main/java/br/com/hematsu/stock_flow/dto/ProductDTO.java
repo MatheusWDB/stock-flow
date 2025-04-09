@@ -18,6 +18,9 @@ public class ProductDTO {
     private Integer stockQuantity;
     private Set<Category> categories = new HashSet<>();
 
+    public ProductDTO() {
+    }
+
     public ProductDTO(Product product) {
         BeanUtils.copyProperties(product, this);
     }
@@ -84,5 +87,10 @@ public class ProductDTO {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public Product toEntity(Product oldProduct) {
+        BeanUtils.copyProperties(this, oldProduct);
+        return oldProduct;
     }
 }

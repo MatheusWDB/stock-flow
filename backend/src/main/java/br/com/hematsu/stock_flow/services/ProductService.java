@@ -17,7 +17,6 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    
     public Product save(Product newProduct) {
         return productRepository.save(newProduct);
     }
@@ -29,5 +28,12 @@ public class ProductService {
             Hibernate.initialize(product.getCategories());
         }
         return products.stream().map(ProductDTO::new).toList();
+    }
+
+    @Transactional
+    public Product findById(Long productId) {
+        Product oldProduct = productRepository.findById(productId).orElse(null);
+        Hibernate.initialize(oldProduct.getCategories());
+        return oldProduct;
     }
 }

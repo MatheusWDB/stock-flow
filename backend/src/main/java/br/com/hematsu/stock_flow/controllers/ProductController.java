@@ -15,7 +15,8 @@ import br.com.hematsu.stock_flow.entities.Category;
 import br.com.hematsu.stock_flow.entities.Product;
 import br.com.hematsu.stock_flow.services.CategoryService;
 import br.com.hematsu.stock_flow.services.ProductService;
-
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/products")
@@ -53,6 +54,17 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> findAll() {
         return ResponseEntity.ok().body(productService.findAll());
     }
-    
+
+    @PutMapping("/update/{productId}")
+    public ResponseEntity<Void> update(@PathVariable Long productId, @RequestBody ProductDTO updatedProduct) {
+
+        Product olProduct = productService.findById(productId);
+
+        updatedProduct.setProductId(olProduct.getProductId());
+
+        productService.save(updatedProduct.toEntity(olProduct));
+
+        return ResponseEntity.ok().build();
+    }
 
 }
