@@ -17,6 +17,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Transactional
     public Product save(Product newProduct) {
         return productRepository.save(newProduct);
     }
@@ -36,4 +37,10 @@ public class ProductService {
         Hibernate.initialize(oldProduct.getCategories());
         return oldProduct;
     }
+
+    @Transactional
+    public void deleteByProductId(Long productId){
+        productRepository.deleteByProductId(productId);
+    }
+
 }
