@@ -1,19 +1,21 @@
 package br.com.hematsu.stock_flow.controllers;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.hematsu.stock_flow.dto.ProductDTO;
 import br.com.hematsu.stock_flow.entities.Category;
 import br.com.hematsu.stock_flow.entities.Product;
 import br.com.hematsu.stock_flow.services.CategoryService;
 import br.com.hematsu.stock_flow.services.ProductService;
+
 
 @RestController
 @RequestMapping("/products")
@@ -46,5 +48,11 @@ public class ProductController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/findAll")
+    public ResponseEntity<List<ProductDTO>> findAll() {
+        return ResponseEntity.ok().body(productService.findAll());
+    }
+    
 
 }
