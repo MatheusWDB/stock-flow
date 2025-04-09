@@ -95,11 +95,7 @@ public class Product implements Serializable {
         this.stockQuantity = stockQuantity;
     }
 
-    public Set<String> getCategories() {
-        Set<String> categories = new HashSet<>();
-        for (Category category : this.categories) {
-            categories.add(category.getName());
-        }
+    public Set<Category> getCategories() {
         return categories;
     }
 
@@ -128,12 +124,10 @@ public class Product implements Serializable {
         return true;
     }
 
-    public static long getSerialversionuid() {
-        return serialVersionUID;
+    @Override
+    public String toString() {
+        return "Product [productId=" + productId + ", name=" + name + ", description=" + description + ", code=" + code
+                + ", costPrice=" + costPrice + ", salePrice=" + salePrice + ", stockQuantity=" + stockQuantity
+                + ", categories=" + categories + "]";
     }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
 }

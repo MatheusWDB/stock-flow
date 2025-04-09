@@ -12,7 +12,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public void save(Product newProduct) {
-        productRepository.save(newProduct);
+    public Product save(Product newProduct) {
+        return productRepository.save(newProduct);
     }
 }
