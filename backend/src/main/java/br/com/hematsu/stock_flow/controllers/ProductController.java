@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.hematsu.stock_flow.dto.ProductDTO;
 import br.com.hematsu.stock_flow.entities.Category;
 import br.com.hematsu.stock_flow.entities.Product;
+import br.com.hematsu.stock_flow.mappers.ProductMapper;
 import br.com.hematsu.stock_flow.services.CategoryService;
 import br.com.hematsu.stock_flow.services.ProductService;
 
@@ -31,11 +32,12 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ProductMapper productMapper;
+
     @PostMapping
-    public ResponseEntity<Void> createProduct(@RequestBody ProductDTO productDTO) {        
-        Product newProduct = new Product(productDTO.getName(), productDTO.getDescription(),
-                productDTO.getCode(), productDTO.getCostPrice(), productDTO.getSalePrice(),
-                productDTO.getStockQuantity());
+    public ResponseEntity<Void> createProduct(@RequestBody ProductDTO productDTO) {
+        Product newProduct = productMapper.toEntity(productDTO);
 
         newProduct = productService.save(newProduct);
 
@@ -54,13 +56,13 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Void> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO updatedProduct) {
+    public ResponseEntity<Void> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO productDTO) {
 
-        Product oldProduct = productService.findById(productId);
+        Product updatedProduct = productService.findById(productId);
 
-        Set<Category> categories = categoryService.findOrCreateCategories(updatedProduct.getCategories());
+        Set<Category> categories = categoryService.findOrCreateCategories(productDTO.getCategories());
 
-        productService.save(updatedProduct.toEntity(oldProduct, categories));
+        productService.save(productDTO.toEntityForUpdate(updatedProduct, categories));
 
         return ResponseEntity.ok().build();
     }

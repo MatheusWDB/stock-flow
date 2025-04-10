@@ -33,6 +33,17 @@ public class StockMovement implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public StockMovement() {
+    }
+
+    public StockMovement(Instant date, String type, Integer quantity, Product product, User user) {
+        this.date = date;
+        this.type = type;
+        this.quantity = quantity;
+        this.product = product;
+        this.user = user;
+    }
+
     public Long getStockMovementId() {
         return stockMovementId;
     }
@@ -61,16 +72,16 @@ public class StockMovement implements Serializable {
         this.quantity = quantity;
     }
 
-    public Long getProduct() {
-        return product.getProductId();
+    public Product getProduct() {
+        return product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
     }
 
-    public Long getUser() {
-        return user.getUserId();
+    public User getUser() {
+        return user;
     }
 
     public void setUser(User user) {

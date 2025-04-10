@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.hematsu.stock_flow.dto.UserDTO;
 import br.com.hematsu.stock_flow.entities.User;
+import br.com.hematsu.stock_flow.mappers.UserMapper;
 import br.com.hematsu.stock_flow.services.UserService;
 
 
@@ -20,11 +21,14 @@ import br.com.hematsu.stock_flow.services.UserService;
 public class UserController {
 
     @Autowired
-    public UserService userService;
+    private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody UserDTO userDTO) {
-        User newUser = userService.convertToUser(userDTO);
+    public ResponseEntity<Void> createUser(@RequestBody UserDTO userDTO) {
+        User newUser = userMapper.toEntity(userDTO);
 
         newUser = userService.crypt(newUser);
 
@@ -34,8 +38,9 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getById(@PathVariable Long userId) {
-        return ResponseEntity.ok().body(userService.findById(userId));
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
+        UserDTO user = userMapper.toDTO(userService.findById(userId));
+        return ResponseEntity.ok().body(user);
     }
     
 
