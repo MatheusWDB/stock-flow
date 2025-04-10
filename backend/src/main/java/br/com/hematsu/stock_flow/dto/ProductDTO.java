@@ -89,8 +89,14 @@ public class ProductDTO {
         this.categories = categories;
     }
 
-    public Product toEntity(Product oldProduct) {
-        BeanUtils.copyProperties(this, oldProduct);
-        return oldProduct;
+    public Product toEntity(Product updatedProduct, Set<Category> categories) {
+        BeanUtils.copyProperties(this, updatedProduct, "categories");
+
+        updatedProduct.getCategories().clear();
+        if (this.categories != null) {
+            updatedProduct.getCategories().addAll(categories);
+        }
+
+        return updatedProduct;
     }
 }
