@@ -1,10 +1,10 @@
 package br.com.hematsu.stock_flow.controllers;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,30 +31,30 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/save")
-    public ResponseEntity<Void> save(@RequestBody Product obj) {
-
-        Product newProduct = new Product(obj.getName(), obj.getDescription(), obj.getCode(), obj.getCostPrice(),
-                obj.getSalePrice(), obj.getStockQuantity());
+    @PostMapping
+    public ResponseEntity<Void> createProduct(@RequestBody ProductDTO productDTO) {        
+        Product newProduct = new Product(productDTO.getName(), productDTO.getDescription(),
+                productDTO.getCode(), productDTO.getCostPrice(), productDTO.getSalePrice(),
+                productDTO.getStockQuantity());
 
         newProduct = productService.save(newProduct);
 
-        Set<Category> categories = categoryService.findOrCreateCategories(obj.getCategories());
+        Set<Category> categories = categoryService.findOrCreateCategories(productDTO.getCategories());
 
         newProduct.getCategories().addAll(categories);
 
         productService.save(newProduct);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/findAll")
-    public ResponseEntity<List<ProductDTO>> findAll() {
+    @GetMapping
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
         return ResponseEntity.ok().body(productService.findAll());
     }
 
-    @PutMapping("/update/{productId}")
-    public ResponseEntity<Void> update(@PathVariable Long productId, @RequestBody ProductDTO updatedProduct) {
+    @PutMapping("/{productId}")
+    public ResponseEntity<Void> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO updatedProduct) {
 
         Product oldProduct = productService.findById(productId);
 
@@ -65,9 +65,9 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete/{productId}")
-    public ResponseEntity<Void> delete(@PathVariable Long productId) {
-        productService.deleteByProductId(productId);
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        productService.deleteById(productId);
 
         return ResponseEntity.ok().build();
     }

@@ -99,4 +99,11 @@ public class ProductDTO {
 
         return updatedProduct;
     }
+
+    @Override
+    public String toString() {
+        return "ProductDTO [productId=" + productId + ", name=" + name + ", description=" + description + ", code="
+                + code + ", costPrice=" + costPrice + ", salePrice=" + salePrice + ", stockQuantity=" + stockQuantity
+                + ", categories=" + categories + "]";
+    }
 }
