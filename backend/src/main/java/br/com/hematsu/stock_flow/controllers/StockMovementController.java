@@ -42,6 +42,8 @@ public class StockMovementController {
 
         stockMovementService.save(newMovement);
 
+        productService.updateStockQuantity(newMovement.getType(), newMovement.getQuantity(), product);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

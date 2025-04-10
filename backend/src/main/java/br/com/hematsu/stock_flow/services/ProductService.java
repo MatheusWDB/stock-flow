@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hematsu.stock_flow.dto.ProductDTO;
 import br.com.hematsu.stock_flow.entities.Product;
+import br.com.hematsu.stock_flow.entities.StockMovement;
 import br.com.hematsu.stock_flow.repositories.ProductRepository;
 
 @Service
@@ -16,6 +17,8 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private StockMovementService stockMovementService;
 
     @Transactional
     public Product save(Product newProduct) {
@@ -39,8 +42,34 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteById(Long productId){
-        productRepository.deleteById(productId);
+    public void deleteById(Long productId) {
+        Product product = findById(productId);
+        List<StockMovement> movements = stockMovementService.findByProduct(product);
+
+        if (movements.isEmpty()) {
+            productRepository.deleteById(productId);
+        }
+
     }
 
+    public void updateStockQuantity(String type, Integer quantity, Product product) {
+        switch (type) {
+            case "IN":
+                product.setStockQuantity(product.getStockQuantity() + quantity);
+                break;
+
+            case "OUT":
+                if (product.getStockQuantity() >= quantity) {
+                    product.setStockQuantity(product.getStockQuantity() - quantity);
+                } else {
+                    return;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        save(product);
+    }
 }

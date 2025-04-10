@@ -1,9 +1,12 @@
 package br.com.hematsu.stock_flow.services;
 
+import java.util.List;
+
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hematsu.stock_flow.entities.Product;
 import br.com.hematsu.stock_flow.entities.StockMovement;
 import br.com.hematsu.stock_flow.repositories.StockMovementRepository;
 
@@ -23,6 +26,10 @@ public class StockMovementService {
         Hibernate.initialize(movement.getUser());
 
         return movement;
+    }
+
+    public List<StockMovement> findByProduct(Product product){
+        return stockMovementRepository.findByProduct(product).orElse(null);
     }
 
 }
