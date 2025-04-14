@@ -2,6 +2,7 @@ import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/category.dart';
 import 'package:frontend/models/product.dart';
+import 'package:frontend/widgets/add_product_dialog.dart';
 import 'package:intl/intl.dart';
 
 class ProductListScreen extends StatefulWidget {
@@ -268,7 +269,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ),
               ),
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: showAddProductDialog,
                 label: Icon(Icons.add),
               )
             ],
@@ -306,5 +307,37 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     .contains(normalize(nameOrCodeFilter.text)))
             .toList()
         : products;
+  }
+
+  void showAddProductDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AddProductDialog(
+        addProduct: addProduct,
+      ),
+    );
+  }
+
+  void addProduct(Map<String, dynamic> controller) {
+    List<Category> categories = [];
+
+    for (TextEditingController category in controller["categories"]) {
+      categories.add(Category(name: category.text));
+    }
+
+    Product newProduct = Product(
+      name: controller["name"].text,
+      description: controller["description"].text,
+      code: controller["code"].text,
+      costPrice: double.tryParse(controller["costPrice"].text) ?? 0,
+      salePrice: double.tryParse(controller["salePrice"].text) ?? 0,
+      stockQuantity: int.tryParse(controller["stockQuantity"].text) ?? 0,
+      categories: categories,
+    );
+
+    setState(() {
+      mockProducts.add(newProduct);
+    });
   }
 }
