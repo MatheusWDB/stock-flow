@@ -1,3 +1,4 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/category.dart';
 import 'package:frontend/models/product.dart';
@@ -183,7 +184,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () => setState(() {
-                            categoryFilter = "Eletrônicos";
+                            categoryFilter = "All";
                           }),
                           child: Text("Filtrar"),
                         ),
@@ -277,6 +278,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
+  String normalize(String input) => removeDiacritics(input).toUpperCase();
+
   List<Product> sortProducts(List<Product> products) {
     products.sort((a, b) {
       int result = selector(a).compareTo(selector(b));
@@ -289,19 +292,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
     products = categoryFilter == "All"
         ? products
         : products
-            .where((product) =>
-                product.categories.any((cat) => cat.name == categoryFilter))
+            .where((product) => product.categories
+                .map((cat) => cat.name)
+                .contains(categoryFilter))
             .toList();
 
     return nameOrCodeFilter.text.isNotEmpty
         ? products
             .where((product) =>
-                product.name
-                    .toUpperCase()
-                    .contains(nameOrCodeFilter.text.toUpperCase()) ||
-                product.code
-                    .toUpperCase()
-                    .contains(nameOrCodeFilter.text.toUpperCase()))
+                normalize(product.name)
+                    .contains(normalize(nameOrCodeFilter.text)) ||
+                normalize(product.code)
+                    .contains(normalize(nameOrCodeFilter.text)))
             .toList()
         : products;
   }
