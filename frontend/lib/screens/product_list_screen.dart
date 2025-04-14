@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/category.dart';
 import 'package:frontend/models/product.dart';
 import 'package:frontend/widgets/add_product_dialog.dart';
+import 'package:frontend/widgets/edit_product_dialog.dart';
 import 'package:intl/intl.dart';
 
 class ProductListScreen extends StatefulWidget {
@@ -201,68 +202,75 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   child: ListView.builder(
                     itemCount: renderProduct.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        surfaceTintColor:
-                            renderProduct[index].stockQuantity <= 5
-                                ? Colors.red
-                                : Colors.green,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                child: Text(renderProduct[index].name,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                              Text("${renderProduct[index].description}"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("Código: ${renderProduct[index].code}"),
-                              Text(
-                                  "Preço de Custo: ${currencyFormat.format(renderProduct[index].costPrice)}"),
-                              Text(
-                                  "Preço de Venda: ${currencyFormat.format(renderProduct[index].salePrice)}"),
-                              Text(
-                                "Estoque: ${renderProduct[index].stockQuantity} unidades",
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Categorias:"),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.6,
-                                    height: 60,
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: ListView.builder(
-                                        itemCount: renderProduct[index]
-                                            .categories
-                                            .length,
-                                        itemBuilder: (context, indexCategory) {
-                                          return Text(
-                                            " ${renderProduct[index].categories[indexCategory].name}",
-                                            softWrap: false,
-                                            overflow: TextOverflow.ellipsis,
-                                          );
-                                        },
-                                      ),
+                      return InkWell(
+                        child: Card(
+                          surfaceTintColor:
+                              renderProduct[index].stockQuantity <= 5
+                                  ? Colors.red
+                                  : Colors.green,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    renderProduct[index].name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  )
-                                ],
-                              ),
-                            ],
+                                  ),
+                                ),
+                                Text("${renderProduct[index].description}"),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text("Código: ${renderProduct[index].code}"),
+                                Text(
+                                    "Preço de Custo: ${currencyFormat.format(renderProduct[index].costPrice)}"),
+                                Text(
+                                    "Preço de Venda: ${currencyFormat.format(renderProduct[index].salePrice)}"),
+                                Text(
+                                  "Estoque: ${renderProduct[index].stockQuantity} unidades",
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Categorias:"),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
+                                      height: 60,
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: ListView.builder(
+                                          itemCount: renderProduct[index]
+                                              .categories
+                                              .length,
+                                          itemBuilder:
+                                              (context, indexCategory) {
+                                            return Text(
+                                              " ${renderProduct[index].categories[indexCategory].name}",
+                                              softWrap: false,
+                                              overflow: TextOverflow.ellipsis,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                        onTap: () =>
+                            showEditProductDialog(renderProduct[index]),
                       );
                     },
                   ),
@@ -340,4 +348,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
       mockProducts.add(newProduct);
     });
   }
+
+  void showEditProductDialog(Product product) {
+    showDialog(
+      context: context,
+      builder: (context) => EditProductDialog(
+        product: product,
+        editProduct: editProduct,
+      ),
+    );
+  }
+
+  void editProduct(Map<String, dynamic> controller) {}
 }

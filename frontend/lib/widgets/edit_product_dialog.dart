@@ -1,97 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/product.dart';
 
-class AddProductDialog extends StatefulWidget {
-  final Function(Map<String, dynamic>) addProduct;
+class EditProductDialog extends StatefulWidget {
+  final Product product;
+  final Function(Map<String, dynamic>) editProduct;
 
-  const AddProductDialog({
+  const EditProductDialog({
     super.key,
-    required this.addProduct,
+    required this.product,
+    required this.editProduct,
   });
 
   @override
-  State<AddProductDialog> createState() => _AddProductDialogState();
+  State<EditProductDialog> createState() => _EditProductDialogState();
 }
 
-class _AddProductDialogState extends State<AddProductDialog> {
+class _EditProductDialogState extends State<EditProductDialog> {
   @override
   void initState() {
     super.initState();
-    addProduct = widget.addProduct;
+    editProduct = widget.editProduct;
+    product = widget.product;
+
+    controller = {
+      "name": TextEditingController(text: product.name),
+      "description": TextEditingController(text: product.description),
+      "code": TextEditingController(text: product.code),
+      "costPrice": TextEditingController(text: product.costPrice.toString()),
+      "salePrice": TextEditingController(text: product.salePrice.toString()),
+      "stockQuantity":
+          TextEditingController(text: product.stockQuantity.toString()),
+      "categories": product.categories
+          .map((category) => TextEditingController(text: category.name))
+          .toList(),
+    };
+
+    error = {
+      "name": null,
+      "description": null,
+      "code": null,
+      "costPrice": null,
+      "salePrice": null,
+      "stockQuantity": null,
+      "categories": List.generate(product.categories.length, (_) => null),
+    };
   }
 
-  late Function(Map<String, dynamic>) addProduct;
+  late Function(Map<String, dynamic>) editProduct;
+  late Product product;
 
-  Map<String, dynamic> controller = {
-    "name": TextEditingController(),
-    "description": TextEditingController(),
-    "code": TextEditingController(),
-    "costPrice": TextEditingController(),
-    "salePrice": TextEditingController(),
-    "stockQuantity": TextEditingController(),
-    "categories": [TextEditingController()],
-  };
+  late Map<String, dynamic> controller;
 
-  final Map<String, dynamic> error = {
-    "name": null,
-    "description": null,
-    "code": null,
-    "costPrice": null,
-    "salePrice": null,
-    "stockQuantity": null,
-    "categories": [null],
-  };
+  late Map<String, dynamic> error;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      actions: [
-        TextButton(
-          onPressed: () => closeDialog(),
-          child: Text("Cancelar"),
-        ),
-        TextButton(
-          onPressed: () {
-            setState(() {
-              if (controller["name"].text.isEmpty) {
-                error["name"] = "Campo requerido";
-                return;
-              }
-              if (controller["code"].text.isEmpty) {
-                error["code"] = "Campo requerido";
-                return;
-              }
-              if (controller["costPrice"].text.isEmpty) {
-                error["costPrice"] = "Campo requerido";
-                return;
-              }
-              if (controller["salePrice"].text.isEmpty) {
-                error["salePrice"] = "Campo requerido";
-                return;
-              }
-              if (controller["stockQuantity"].text.isEmpty) {
-                error["stockQuantity"] = "Campo requerido";
-                return;
-              }
-
-              bool hasCategoryError = false;
-              for (int i = 0; i < controller["categories"].length; i++) {
-                if (controller["categories"][i].text.isEmpty) {
-                  error["categories"][i] = "Campo requerido";
-                  hasCategoryError = true;
-                } else {
-                  error["categories"][i] = null;
-                }
-              }
-
-              if (hasCategoryError) return;
-            });
-
-            addProduct(controller);
-            closeDialog();
-          },
-          child: Text("Adicionar"),
-        ),
-      ],
+      actions: [],
       content: Column(
         children: [
           TextField(
@@ -224,31 +189,5 @@ class _AddProductDialogState extends State<AddProductDialog> {
         ],
       ),
     );
-  }
-
-  void closeDialog() {
-    Navigator.of(context).pop();
-    resetController();
-    resetError();
-  }
-
-  void resetController() {
-    controller["name"].clear();
-    controller["description"].clear();
-    controller["code"].clear();
-    controller["costPrice"].clear();
-    controller["salePrice"].clear();
-    controller["stockQuantity"].clear();
-    controller["categories"].clear();
-  }
-
-  void resetError() {
-    error["name"] = null;
-    error["description"] = null;
-    error["code"] = null;
-    error["costPrice"] = null;
-    error["salePrice"] = null;
-    error["stockQuantity"] = null;
-    error["categories"].clear();
   }
 }
