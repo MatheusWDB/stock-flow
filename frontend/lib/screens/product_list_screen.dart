@@ -2,8 +2,7 @@ import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/category.dart';
 import 'package:frontend/models/product.dart';
-import 'package:frontend/widgets/add_product_dialog.dart';
-import 'package:frontend/widgets/edit_product_dialog.dart';
+import 'package:frontend/widgets/product_form_dialog.dart';
 import 'package:intl/intl.dart';
 
 class ProductListScreen extends StatefulWidget {
@@ -270,14 +269,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           ),
                         ),
                         onTap: () =>
-                            showEditProductDialog(renderProduct[index]),
+                            showFormProduct(renderProduct[index], index),
                       );
                     },
                   ),
                 ),
               ),
               ElevatedButton.icon(
-                onPressed: showAddProductDialog,
+                onPressed: () => showFormProduct(null, null),
                 label: Icon(Icons.add),
               )
             ],
@@ -317,17 +316,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
         : products;
   }
 
-  void showAddProductDialog() {
+  void showFormProduct(Product? product, int? index) {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => AddProductDialog(
-        addProduct: addProduct,
-      ),
+      builder: (context) {
+        if (product != null && index != null) {
+          return ProductFormDialog(
+            product: product,
+            index: index,
+            saveProduct: saveProduct,
+          );
+        } else {
+          return ProductFormDialog(
+            saveProduct: saveProduct,
+          );
+        }
+      },
     );
   }
 
-  void addProduct(Map<String, dynamic> controller) {
+  void saveProduct(Map<String, dynamic> controller, int? index) {
     List<Category> categories = [];
 
     for (TextEditingController category in controller["categories"]) {
@@ -345,19 +354,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
 
     setState(() {
-      mockProducts.add(newProduct);
+      if (index == null) {
+        mockProducts.add(newProduct);
+      } else {
+        mockProducts[index] = newProduct;
+      }
     });
   }
-
-  void showEditProductDialog(Product product) {
-    showDialog(
-      context: context,
-      builder: (context) => EditProductDialog(
-        product: product,
-        editProduct: editProduct,
-      ),
-    );
-  }
-
-  void editProduct(Map<String, dynamic> controller) {}
 }
