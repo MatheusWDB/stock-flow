@@ -8,7 +8,7 @@ class ProductFormDialog extends StatefulWidget {
     this.product,
     this.index,
   });
-  
+
   final Product? product;
   final int? index;
   final Function(Map<String, dynamic>, int?) saveProduct;
@@ -82,6 +82,18 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                 });
                 return;
               }
+            }
+
+            if (double.tryParse(controller['costPrice'].text)! >=
+                double.tryParse(controller['salePrice'].text)!) {
+              setState(() {
+                error['costPrice'] =
+                    'O preço de custo tem que ser menor do quê o de venda';
+
+                error['salePrice'] =
+                    'O preço de venda tem que ser maior do quê o de custo';
+              });
+              return;
             }
 
             bool hasCategoryError = false;
