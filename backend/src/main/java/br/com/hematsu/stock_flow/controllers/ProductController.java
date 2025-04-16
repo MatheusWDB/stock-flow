@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.hematsu.stock_flow.dto.ProductDTO;
+import br.com.hematsu.stock_flow.dtos.ProductDTO;
 import br.com.hematsu.stock_flow.entities.Category;
 import br.com.hematsu.stock_flow.entities.Product;
 import br.com.hematsu.stock_flow.mappers.ProductMapper;
@@ -51,7 +50,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return ResponseEntity.ok().body(productService.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findAll());
     }
 
     @PutMapping("/{productId}")

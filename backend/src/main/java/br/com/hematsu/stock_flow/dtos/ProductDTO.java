@@ -1,4 +1,4 @@
-package br.com.hematsu.stock_flow.dto;
+package br.com.hematsu.stock_flow.dtos;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class ProductDTO {
     private Double costPrice;
     private Double salePrice;
     private Integer stockQuantity;
-    private Set<Category> categories = new HashSet<>();
+    private Set<InnerCategoryDTO> categories = new HashSet<>();
 
     public ProductDTO() {
     }
@@ -81,12 +81,30 @@ public class ProductDTO {
         this.stockQuantity = stockQuantity;
     }
 
-    public Set<Category> getCategories() {
+    public Set<InnerCategoryDTO> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<Category> categories) {
+    public void setCategories(Set<InnerCategoryDTO> categories) {
         this.categories = categories;
+    }
+
+    public static class InnerCategoryDTO {
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return "InnerCategoryDTO [name=" + name + "]";
+        }
+        
     }
 
     public Product toEntityForUpdate(Product updatedProduct, Set<Category> categories) {
@@ -100,10 +118,4 @@ public class ProductDTO {
         return updatedProduct;
     }
 
-    @Override
-    public String toString() {
-        return "ProductDTO [productId=" + productId + ", name=" + name + ", description=" + description + ", code="
-                + code + ", costPrice=" + costPrice + ", salePrice=" + salePrice + ", stockQuantity=" + stockQuantity
-                + ", categories=" + categories + "]";
-    }
 }

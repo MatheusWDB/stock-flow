@@ -17,14 +17,16 @@ public class User implements Serializable {
 
     private String username;
     private String password;
+    private String email;
     private String name;
 
     public User() {
     }
 
-    public User(String username, String password, String name) {
+    public User(String username, String password, String email, String name) {
         this.username = username;
         this.password = password;
+        this.email = email;
         this.name = name;
     }
 
@@ -48,6 +50,14 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getName() {
         return name;
     }
@@ -62,7 +72,7 @@ public class User implements Serializable {
         int result = 1;
         result = prime * result + ((userId == null) ? 0 : userId.hashCode());
         result = prime * result + ((username == null) ? 0 : username.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
         return result;
     }
 
@@ -85,11 +95,18 @@ public class User implements Serializable {
                 return false;
         } else if (!username.equals(other.username))
             return false;
-        if (password == null) {
-            if (other.password != null)
+        if (email == null) {
+            if (other.email != null)
                 return false;
-        } else if (!password.equals(other.password))
+        } else if (!email.equals(other.email))
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", email=" + email
+                + ", name=" + name + "]";
+    }
+
 }

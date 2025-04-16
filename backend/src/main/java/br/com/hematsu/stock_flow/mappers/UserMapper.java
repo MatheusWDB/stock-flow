@@ -2,7 +2,7 @@ package br.com.hematsu.stock_flow.mappers;
 
 import org.springframework.stereotype.Component;
 
-import br.com.hematsu.stock_flow.dto.UserDTO;
+import br.com.hematsu.stock_flow.dtos.UserDTO;
 import br.com.hematsu.stock_flow.entities.User;
 
 @Component
@@ -13,7 +13,7 @@ public class UserMapper {
     }
 
     public User toEntity(UserDTO userDTO) {
-        return new User(userDTO.getUsername(), userDTO.getPassword(), userDTO.getName());
+        return new User(userDTO.getUsername(), userDTO.getPassword(), userDTO.getEmail(), userDTO.getName());
     }
 
 }

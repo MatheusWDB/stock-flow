@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.hematsu.stock_flow.dto.StockMovementDTO;
+import br.com.hematsu.stock_flow.dtos.StockMovementDTO;
 import br.com.hematsu.stock_flow.entities.Product;
 import br.com.hematsu.stock_flow.entities.StockMovement;
 import br.com.hematsu.stock_flow.entities.User;
@@ -35,7 +35,7 @@ public class StockMovementController {
 
     @PostMapping
     public ResponseEntity<Void> createStockMovement(@RequestBody StockMovementDTO movementDTO) {
-        User user = userService.findById(movementDTO.getUser().getUserId());
+        User user = userService.findByEmail(movementDTO.getUser().getEmail());
         Product product = productService.findById(movementDTO.getProductId());
 
         StockMovement newMovement = stockMovementeMapper.toEntity(movementDTO, product, user);

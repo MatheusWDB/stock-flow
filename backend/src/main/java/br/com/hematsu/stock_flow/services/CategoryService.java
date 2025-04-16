@@ -7,6 +7,8 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hematsu.stock_flow.dtos.ProductDTO;
+import br.com.hematsu.stock_flow.dtos.ProductDTO.InnerCategoryDTO;
 import br.com.hematsu.stock_flow.entities.Category;
 import br.com.hematsu.stock_flow.repositories.CategoryRepository;
 import jakarta.transaction.Transactional;
@@ -32,15 +34,15 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public Set<Category> findOrCreateCategories(Set<Category> categories) {
+    public Set<Category> findOrCreateCategories(Set<ProductDTO.InnerCategoryDTO> categories) {
         Set<Category> updatedCategories = new HashSet<>();
 
-        for (Category category : categories) {
+        for (InnerCategoryDTO category : categories) {
 
             Category existing = findByName(category.getName());
 
             if (existing == null) {
-                existing = save(category);
+                existing = save(new Category(category.getName()));
             }
 
             updatedCategories.add(existing);

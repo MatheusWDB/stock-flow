@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.hematsu.stock_flow.dto.ProductDTO;
+import br.com.hematsu.stock_flow.dtos.ProductDTO;
 import br.com.hematsu.stock_flow.entities.Product;
 import br.com.hematsu.stock_flow.entities.StockMovement;
 import br.com.hematsu.stock_flow.repositories.ProductRepository;

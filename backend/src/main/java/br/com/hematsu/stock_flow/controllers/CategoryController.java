@@ -3,6 +3,7 @@ package br.com.hematsu.stock_flow.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ public class CategoryController {
     @GetMapping("/findAll")
     public ResponseEntity<List<Category>> findAll(){
         List<Category> results = categoryService.findAll();
-        return ResponseEntity.ok().body(results);
+        return ResponseEntity.status(HttpStatus.OK).body(results);
     }
 }
 

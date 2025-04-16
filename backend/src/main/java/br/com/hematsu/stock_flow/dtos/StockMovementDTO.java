@@ -1,4 +1,4 @@
-package br.com.hematsu.stock_flow.dto;
+package br.com.hematsu.stock_flow.dtos;
 
 import java.time.Instant;
 
@@ -13,7 +13,7 @@ public class StockMovementDTO {
     private String type;
     private Integer quantity;
     private Long productId;
-    private UserSummaryDTO user;
+    private InnerUserDTO user;
 
     public StockMovementDTO() {
     }
@@ -24,7 +24,7 @@ public class StockMovementDTO {
         this.type = stockMovement.getType();
         this.quantity = stockMovement.getQuantity();
         this.productId = stockMovement.getProduct().getProductId();
-        this.user = new UserSummaryDTO(stockMovement.getUser().getUserId(), stockMovement.getUser().getName());
+        this.user = new InnerUserDTO(stockMovement.getUser().getEmail(), stockMovement.getUser().getName());
     }
 
     public Long getStockMovementId() {
@@ -67,29 +67,29 @@ public class StockMovementDTO {
         this.productId = productId;
     }
 
-    public UserSummaryDTO getUser() {
+    public InnerUserDTO getUser() {
         return user;
     }
 
-    public void setUser(UserSummaryDTO user) {
+    public void setUser(InnerUserDTO user) {
         this.user = user;
     }
 
-    public static class UserSummaryDTO {
-        private Long userId;
+    public static class InnerUserDTO {
+        private String email;
         private String name;
 
-        public UserSummaryDTO(Long userId, String name) {
-            this.userId = userId;
+        public InnerUserDTO(String email, String name) {
+            this.email = email;
             this.name = name;
         }
 
-        public Long getUserId() {
-            return userId;
+        public String getEmail() {
+            return email;
         }
 
-        public void setUserId(Long userId) {
-            this.userId = userId;
+        public void setEmail(String email) {
+            this.email = email;
         }
 
         public String getName() {
@@ -102,7 +102,7 @@ public class StockMovementDTO {
 
         @Override
         public String toString() {
-            return "UserSummaryDTO [userId=" + userId + ", name=" + name + "]";
+            return "InnerUserDTO [email=" + email + ", name=" + name + "]";
         }
     }
 

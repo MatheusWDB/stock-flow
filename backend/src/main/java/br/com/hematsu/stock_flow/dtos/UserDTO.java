@@ -1,28 +1,19 @@
-package br.com.hematsu.stock_flow.dto;
-
-import org.springframework.beans.BeanUtils;
+package br.com.hematsu.stock_flow.dtos;
 
 import br.com.hematsu.stock_flow.entities.User;
 
 public class UserDTO {
-    private Long userId;
     private String username;
     private String password;
+    private String email;
     private String name;
 
     public UserDTO() {
     }
 
-    public UserDTO(User user){
-        BeanUtils.copyProperties(user, this);
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public UserDTO(User user) {
+        this.email = user.getEmail();
+        this.name = user.getName();
     }
 
     public String getUsername() {
@@ -41,6 +32,14 @@ public class UserDTO {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getName() {
         return name;
     }
@@ -51,7 +50,7 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO [userId=" + userId + ", username=" + username + ", password=" + password + ", name=" + name
-                + "]";
+        return "UserDTO [username=" + username + ", password=" + password + ", email=" + email + ", name=" + name + "]";
     }
+
 }

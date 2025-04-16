@@ -2,7 +2,7 @@ package br.com.hematsu.stock_flow.mappers;
 
 import org.springframework.stereotype.Component;
 
-import br.com.hematsu.stock_flow.dto.ProductDTO;
+import br.com.hematsu.stock_flow.dtos.ProductDTO;
 import br.com.hematsu.stock_flow.entities.Product;
 
 @Component
