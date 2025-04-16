@@ -43,6 +43,7 @@ dependencies:
     sdk: flutter
   graphic: ^2.5.1
   diacritic: ^0.1.3
+  http: ^1.3.0
 
 #flutter_launcher_icons:
   #android: true

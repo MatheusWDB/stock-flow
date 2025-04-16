@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/category.dart';
 import 'package:frontend/models/product.dart';
+import 'package:frontend/services/product_service.dart';
 
 class ProductFormDialog extends StatefulWidget {
   const ProductFormDialog({
-    required this.saveProduct,
+    required this.getAllProducts,
     super.key,
     this.product,
     this.index,
@@ -11,7 +13,7 @@ class ProductFormDialog extends StatefulWidget {
 
   final Product? product;
   final int? index;
-  final Function(Map<String, dynamic>, int?) saveProduct;
+  final Function() getAllProducts;
 
   @override
   State<ProductFormDialog> createState() => _ProductFormDialogState();
@@ -22,7 +24,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
   late int? index;
   late Map<String, dynamic> controller;
   late Map<String, dynamic> error;
-  late Function(Map<String, dynamic>, int?) saveProduct;
+  late Function() getAllProducts;
 
   @override
   void initState() {
@@ -54,13 +56,19 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
           ? List.generate(product!.categories.length, (value) => null)
           : [null],
     };
-    saveProduct = widget.saveProduct;
+    getAllProducts = widget.getAllProducts;
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       actions: [
+        if (product != null)
+          TextButton(
+              onPressed: () {
+                deleteProduct();
+              },
+              child: const Text('Deletar')),
         TextButton(
           onPressed: () => closeDialog(),
           child: const Text('Cancelar'),
@@ -88,10 +96,10 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                 double.tryParse(controller['salePrice'].text)!) {
               setState(() {
                 error['costPrice'] =
-                    'O preço de custo tem que ser menor do quê o de venda';
+                    'O preço de custo deve ser menor que o de venda';
 
                 error['salePrice'] =
-                    'O preço de venda tem que ser maior do quê o de custo';
+                    'O preço de venda deve ser maior que o de custo';
               });
               return;
             }
@@ -109,8 +117,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
 
             if (hasCategoryError) return;
 
-            saveProduct(controller, index);
-            closeDialog();
+            saveProduct();
           },
           child: const Text('Salvar'),
         ),
@@ -288,5 +295,48 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
     error['salePrice'] = null;
     error['stockQuantity'] = null;
     error['categories'].clear();
+  }
+
+  void saveProduct() async {
+    final List<Category> categories = [];
+
+    for (TextEditingController category in controller['categories']) {
+      categories.add(Category(name: category.text));
+    }
+
+    final Product newProduct = Product(
+      productId: product?.productId,
+      name: controller['name'].text,
+      description: controller['description'].text,
+      code: controller['code'].text,
+      costPrice: double.tryParse(controller['costPrice'].text) ?? 0,
+      salePrice: double.tryParse(controller['salePrice'].text) ?? 0,
+      stockQuantity: int.tryParse(controller['stockQuantity'].text) ?? 0,
+      categories: categories,
+    );
+
+    try {
+      if (newProduct.productId == null) {
+        await ProductService.createProduct(newProduct);
+      } else {
+        await ProductService.updateProduct(newProduct, newProduct.productId!);
+      }
+
+      getAllProducts();
+      closeDialog();
+    } catch (e) {
+      debugPrint('Erro ao salvar produto: $e');
+    }
+  }
+
+  void deleteProduct() async {
+    try {
+      await ProductService.deleteProduct(product!.productId!);
+
+      getAllProducts();
+      closeDialog();
+    } catch (e) {
+      debugPrint('Erro ao salvar produto: $e');
+    }
   }
 }
