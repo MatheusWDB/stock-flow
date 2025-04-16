@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,11 +39,9 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Void> createProduct(@RequestBody ProductDTO productDTO) {
         Product newProduct = productMapper.toEntity(productDTO);
-
         newProduct = productService.save(newProduct);
 
         Set<Category> categories = categoryService.findOrCreateCategories(productDTO.getCategories());
-
         newProduct.getCategories().addAll(categories);
 
         productService.save(newProduct);
@@ -64,14 +63,14 @@ public class ProductController {
 
         productService.save(productDTO.toEntityForUpdate(updatedProduct, categories));
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
         productService.deleteById(productId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
