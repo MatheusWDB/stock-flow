@@ -29,7 +29,7 @@ linter:
     avoid_print: true
     avoid_unnecessary_containers: true
     use_key_in_widget_constructors: true
-    sort_constructors_first: true
+    #sort_constructors_first: true
     prefer_const_constructors: true
     prefer_const_literals_to_create_immutables: true
     prefer_final_fields: true

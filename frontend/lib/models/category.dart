@@ -9,13 +9,11 @@ class Category {
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      categoryId: json['categoryId'],
       name: json['name'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'categoryId': categoryId,
         'name': name,
       };
 }
