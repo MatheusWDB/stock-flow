@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.hematsu.stock_flow.dtos.ProductDTO;
 import br.com.hematsu.stock_flow.entities.Product;
 import br.com.hematsu.stock_flow.entities.StockMovement;
+import br.com.hematsu.stock_flow.enums.TypeEnum;
 import br.com.hematsu.stock_flow.repositories.ProductRepository;
 
 @Service
@@ -52,20 +53,18 @@ public class ProductService {
 
     }
 
-    public void updateStockQuantity(String type, Integer quantity, Product product) {
+    public void updateStockQuantity(TypeEnum type, Integer quantity, Product product) {
         switch (type) {
-            case "IN":
+            case IN:
                 product.setStockQuantity(product.getStockQuantity() + quantity);
                 break;
-
-            case "OUT":
+            case OUT:
                 if (product.getStockQuantity() >= quantity) {
                     product.setStockQuantity(product.getStockQuantity() - quantity);
                 } else {
                     return;
                 }
                 break;
-
             default:
                 break;
         }

@@ -1,5 +1,7 @@
 package br.com.hematsu.stock_flow.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +35,10 @@ public class StockMovementController {
     @Autowired
     private StockMovementeMapper stockMovementeMapper;
 
-    @PostMapping
-    public ResponseEntity<Void> createStockMovement(@RequestBody StockMovementDTO movementDTO) {
-        User user = userService.findByEmail(movementDTO.getUser().getEmail());
+    @PostMapping("/{userId}")
+    public ResponseEntity<Void> createStockMovement(@PathVariable Long userId,
+            @RequestBody StockMovementDTO movementDTO) {
+        User user = userService.findById(userId);
         Product product = productService.findById(movementDTO.getProductId());
 
         StockMovement newMovement = stockMovementeMapper.toEntity(movementDTO, product, user);
@@ -47,14 +50,9 @@ public class StockMovementController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{stockMovimentId}")
-    public ResponseEntity<StockMovementDTO> getById(@PathVariable Long stockMovimentId) {
-        StockMovement movement = stockMovementService.findById(stockMovimentId);
-        System.out.println(movement);
-
-        StockMovementDTO movementDTO = stockMovementeMapper.toDTO(movement);
-
-        return ResponseEntity.ok().body(movementDTO);
+    @GetMapping
+    public ResponseEntity<List<StockMovementDTO>> getAllStockMovement() {
+        return ResponseEntity.ok().body(stockMovementService.findAll());
     }
 
 }

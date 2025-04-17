@@ -2,6 +2,7 @@ package br.com.hematsu.stock_flow.dtos;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 
@@ -23,6 +24,12 @@ public class ProductDTO {
 
     public ProductDTO(Product product) {
         BeanUtils.copyProperties(product, this);
+
+        if (product.getCategories() != null) {
+            this.categories = product.getCategories().stream()
+                    .map(InnerCategoryDTO::new)
+                    .collect(Collectors.toSet());
+        }
     }
 
     public Long getProductId() {
@@ -92,6 +99,13 @@ public class ProductDTO {
     public static class InnerCategoryDTO {
         private String name;
 
+        public InnerCategoryDTO() {
+        }
+
+        public InnerCategoryDTO(Category category) {
+            this.name = category.getName();
+        }
+
         public String getName() {
             return name;
         }
@@ -104,7 +118,7 @@ public class ProductDTO {
         public String toString() {
             return "InnerCategoryDTO [name=" + name + "]";
         }
-        
+
     }
 
     public Product toEntityForUpdate(Product updatedProduct, Set<Category> categories) {

@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hematsu.stock_flow.dtos.StockMovementDTO;
 import br.com.hematsu.stock_flow.entities.Product;
 import br.com.hematsu.stock_flow.entities.StockMovement;
 import br.com.hematsu.stock_flow.repositories.StockMovementRepository;
@@ -20,15 +21,17 @@ public class StockMovementService {
         return stockMovementRepository.save(movement);
     }
 
-    public StockMovement findById(Long movementId) {
-        StockMovement movement = stockMovementRepository.findById(movementId).orElse(null);
+    public List<StockMovementDTO> findAll() {
+        List<StockMovement> movements = stockMovementRepository.findAll();
 
-        Hibernate.initialize(movement.getUser());
+        for (StockMovement movement : movements) {
+            Hibernate.initialize(movement.getUser());
+        }
 
-        return movement;
+        return movements.stream().map(StockMovementDTO::new).toList();
     }
 
-    public List<StockMovement> findByProduct(Product product){
+    public List<StockMovement> findByProduct(Product product) {
         return stockMovementRepository.findByProduct(product).orElse(null);
     }
 

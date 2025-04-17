@@ -2,6 +2,8 @@ package br.com.hematsu.stock_flow.controllers;
 
 import java.util.List;
 import java.util.Set;
+import br.com.hematsu.stock_flow.services.StockMovementService;
+import br.com.hematsu.stock_flow.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.hematsu.stock_flow.dtos.ProductDTO;
 import br.com.hematsu.stock_flow.entities.Category;
 import br.com.hematsu.stock_flow.entities.Product;
+import br.com.hematsu.stock_flow.entities.StockMovement;
+import br.com.hematsu.stock_flow.entities.User;
+import br.com.hematsu.stock_flow.enums.TypeEnum;
 import br.com.hematsu.stock_flow.mappers.ProductMapper;
 import br.com.hematsu.stock_flow.services.CategoryService;
 import br.com.hematsu.stock_flow.services.ProductService;
@@ -25,6 +30,12 @@ import br.com.hematsu.stock_flow.services.ProductService;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
+    @Autowired
+    private StockMovementService stockMovementService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private CategoryService categoryService;
@@ -35,15 +46,26 @@ public class ProductController {
     @Autowired
     private ProductMapper productMapper;
 
-    @PostMapping
-    public ResponseEntity<Void> createProduct(@RequestBody ProductDTO productDTO) {
+    ProductController(StockMovementService stockMovementService) {
+        this.stockMovementService = stockMovementService;
+    }
+
+    @PostMapping("/{userId}")
+    public ResponseEntity<Void> createProduct(@PathVariable Long userId, @RequestBody ProductDTO productDTO) {
         Product newProduct = productMapper.toEntity(productDTO);
         newProduct = productService.save(newProduct);
 
         Set<Category> categories = categoryService.findOrCreateCategories(productDTO.getCategories());
+        
         newProduct.getCategories().addAll(categories);
 
-        productService.save(newProduct);
+        newProduct = productService.save(newProduct);
+
+        User user = userService.findById(userId);
+
+        StockMovement movement = new StockMovement(TypeEnum.IN.getCode(), newProduct.getStockQuantity(), newProduct, user);
+
+        stockMovementService.save(movement);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

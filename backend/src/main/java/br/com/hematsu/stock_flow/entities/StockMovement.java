@@ -5,6 +5,7 @@ import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.hematsu.stock_flow.enums.TypeEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,7 +23,7 @@ public class StockMovement implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT-03:00")
     private Instant date;
-    private String type;
+    private Integer type;
     private Integer quantity;
 
     @ManyToOne
@@ -36,8 +37,7 @@ public class StockMovement implements Serializable {
     public StockMovement() {
     }
 
-    public StockMovement(Instant date, String type, Integer quantity, Product product, User user) {
-        this.date = date;
+    public StockMovement(int type, Integer quantity, Product product, User user) {
         this.type = type;
         this.quantity = quantity;
         this.product = product;
@@ -56,12 +56,13 @@ public class StockMovement implements Serializable {
         this.date = date;
     }
 
-    public String getType() {
-        return type;
+    public TypeEnum getType() {
+        return TypeEnum.valueOf(type);
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setType(TypeEnum type) {
+        if (type != null)
+            this.type = type.getCode();
     }
 
     public Integer getQuantity() {

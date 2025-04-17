@@ -15,7 +15,6 @@ public class StockMovementeMapper {
     }
 
     public StockMovement toEntity(StockMovementDTO movementDTO, Product product, User user) {
-        return new StockMovement(movementDTO.getDate(), movementDTO.getType(), movementDTO.getQuantity(), product,
-                user);
+        return new StockMovement(movementDTO.getType(), movementDTO.getQuantity(), product, user);
     }
 }
