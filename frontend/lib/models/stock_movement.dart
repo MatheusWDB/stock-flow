@@ -1,8 +1,8 @@
 import 'package:frontend/models/enums/type_enum.dart';
 import 'package:frontend/models/user.dart';
 
-class StockMovements {
-  StockMovements({
+class StockMovement {
+  StockMovement({
     required this.stockMovementId,
     required this.date,
     required this.type,
@@ -18,8 +18,8 @@ class StockMovements {
   int productId;
   User user;
 
-  factory StockMovements.fromJson(Map<String, dynamic> json) {
-    return StockMovements(
+  factory StockMovement.fromJson(Map<String, dynamic> json) {
+    return StockMovement(
       stockMovementId: json['stockMovementId'],
       date: json['date'],
       type: TypeEnum.values.firstWhere((e) => e.name == json['type']),
