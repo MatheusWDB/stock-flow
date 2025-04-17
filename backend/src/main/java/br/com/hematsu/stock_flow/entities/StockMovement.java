@@ -3,6 +3,8 @@ package br.com.hematsu.stock_flow.entities;
 import java.io.Serializable;
 import java.time.Instant;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.hematsu.stock_flow.enums.TypeEnum;
@@ -21,6 +23,7 @@ public class StockMovement implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stockMovementId;
 
+    @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT-03:00")
     private Instant date;
     private Integer type;
