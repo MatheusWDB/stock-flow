@@ -5,8 +5,8 @@ import 'package:frontend/services/product_service.dart';
 
 class ProductFormDialog extends StatefulWidget {
   const ProductFormDialog({
-    required this.getAllProducts,
     super.key,
+    required this.getAllProducts,
     this.product,
     this.index,
   });

@@ -21,11 +21,11 @@ class StockMovement {
   factory StockMovement.fromJson(Map<String, dynamic> json) {
     return StockMovement(
       stockMovementId: json['stockMovementId'],
-      date: json['date'],
-      type: TypeEnum.values.firstWhere((e) => e.name == json['type']),
+      date: DateTime.parse(json['date']),
+      type: TypeEnum.values[json['type']],
       quantity: json['quantity'],
       productId: json['productId'],
-      user: json['user'].fromJson(),
+      user: User.fromJson(json['user']),
     );
   }
 
