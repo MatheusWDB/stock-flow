@@ -3,6 +3,7 @@ import 'package:frontend/models/product.dart';
 import 'package:frontend/models/stock_movement.dart';
 import 'package:frontend/services/product_service.dart';
 import 'package:frontend/services/stock_movement_service.dart';
+import 'package:frontend/widgets/main_menu.dart';
 import 'package:frontend/widgets/movements_chart.dart';
 import 'package:intl/intl.dart';
 
@@ -29,27 +30,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Dashboard'),
+        ),
         body: Column(
           children: [
+            MainMenu(
+              currentRoute: '/dashboard',
+              movements: movements,
+              products: products,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Card(
-                  child: Text(
-                    'Total de Produtos\n${products.length}',
-                    textAlign: TextAlign.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      'Total de Produtos\n${products.length}',
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
                 Card(
-                  child: Text(
-                    'Estoque Baixo\n${products.where((product) => product.stockQuantity <= 5).length}',
-                    textAlign: TextAlign.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      'Estoque Baixo\n${products.where((product) => product.stockQuantity <= 5).length}',
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
                 Card(
-                  child: Text(
-                    'Última movimentação\n${latestMovement != null ? DateFormat("dd/MM/yyyy\nHH:mm").format(latestMovement!.date.toLocal()) : 'Nenhuma'}',
-                    textAlign: TextAlign.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      'Última movimentação\n${latestMovement != null ? DateFormat("dd/MM/yyyy - HH:mm").format(latestMovement!.date.toLocal()) : 'Nenhuma'}',
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ],

@@ -1,12 +1,21 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/product.dart';
+import 'package:frontend/models/stock_movement.dart';
 import 'package:frontend/services/product_service.dart';
+import 'package:frontend/widgets/main_menu.dart';
 import 'package:frontend/widgets/product_form_dialog.dart';
 import 'package:intl/intl.dart';
 
 class ProductListScreen extends StatefulWidget {
-  const ProductListScreen({super.key});
+  const ProductListScreen({
+    required this.products,
+    required this.movements,
+    super.key,
+  });
+
+  final List<Product> products;
+  final List<StockMovement> movements;
 
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();
@@ -16,12 +25,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   void initState() {
     super.initState();
-    getAllProducts();
+    movements = widget.movements;
+    products = widget.products;
   }
 
   final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
   List<Product> products = [];
+  List<StockMovement> movements = [];
 
   TextEditingController nameOrCodeFilter = TextEditingController();
   String categoryFilter = 'All';
@@ -36,10 +47,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('ProductList'),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
             children: [
+              MainMenu(
+                currentRoute: '/products',
+                products: products,
+                movements: movements,
+              ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
