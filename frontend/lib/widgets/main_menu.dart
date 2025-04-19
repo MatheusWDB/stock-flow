@@ -26,7 +26,7 @@ class MainMenu extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const DashboardScreen(),
@@ -40,7 +40,7 @@ class MainMenu extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ProductListScreen(
@@ -57,7 +57,7 @@ class MainMenu extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => MovementsScreen(
