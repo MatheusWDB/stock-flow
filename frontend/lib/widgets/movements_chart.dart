@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 
 class MovementsChart extends StatefulWidget {
   const MovementsChart({
-    super.key,
     required this.movements,
+    super.key,
   });
 
   final List<StockMovement> movements;
@@ -60,11 +60,11 @@ class _MovementsChartState extends State<MovementsChart> {
               updaters: {
                 'entrada': {
                   true: (cor) => Colors.green,
-                  false: (cor) => Colors.yellow, 
+                  false: (cor) => Colors.yellow,
                 },
                 'saída': {
                   true: (cor) => Colors.red,
-                  false: (cor) => Colors.yellow, 
+                  false: (cor) => Colors.yellow,
                 },
               },
             ),
