@@ -18,11 +18,7 @@ class UserService {
     }
   }
 
-  static Future<User> getUserByEmail(String email) async {
-    final User user = User(
-      email: email,
-    );
-
+  static Future<User> login(User user) async {
     final response = await http.post(
       Uri.parse(baseUrl),
       headers: {'Content-Type': 'application/json'},

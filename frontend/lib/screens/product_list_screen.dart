@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/product.dart';
 import 'package:frontend/models/stock_movement.dart';
 import 'package:frontend/services/product_service.dart';
+import 'package:frontend/services/stock_movement_service.dart';
 import 'package:frontend/widgets/main_menu.dart';
 import 'package:frontend/widgets/product_form_dialog.dart';
 import 'package:intl/intl.dart';
@@ -228,22 +229,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
           return ProductFormDialog(
             product: product,
             index: index,
-            getAllProducts: getAllProducts,
+            getAllProductsAndMovements: getAllProductsAndMovements,
           );
         } else {
           return ProductFormDialog(
-            getAllProducts: getAllProducts,
+            getAllProductsAndMovements: getAllProductsAndMovements,
           );
         }
       },
     );
   }
 
-  void getAllProducts() async {
+  void getAllProductsAndMovements() async {
     try {
-      final result = await ProductService.getAllProducts();
+      final resultProducts = await ProductService.getAllProducts();
+      final resultMovements = await StockMovementService.getAllStockMovemente();
       setState(() {
-        products = result;
+        products = resultProducts;
+        movements = resultMovements;
       });
     } catch (e) {
       debugPrint('Erro ao buscar produtos: $e');

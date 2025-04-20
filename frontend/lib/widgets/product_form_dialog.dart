@@ -5,7 +5,7 @@ import 'package:frontend/services/product_service.dart';
 
 class ProductFormDialog extends StatefulWidget {
   const ProductFormDialog({
-    required this.getAllProducts,
+    required this.getAllProductsAndMovements,
     super.key,
     this.product,
     this.index,
@@ -13,7 +13,7 @@ class ProductFormDialog extends StatefulWidget {
 
   final Product? product;
   final int? index;
-  final Function() getAllProducts;
+  final Function() getAllProductsAndMovements;
 
   @override
   State<ProductFormDialog> createState() => _ProductFormDialogState();
@@ -24,7 +24,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
   late int? index;
   late Map<String, dynamic> controller;
   late Map<String, dynamic> error;
-  late Function() getAllProducts;
+  late Function() getAllProductsAndMovements;
 
   @override
   void initState() {
@@ -56,7 +56,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
           ? List.generate(product!.categories.length, (value) => null)
           : [null],
     };
-    getAllProducts = widget.getAllProducts;
+    getAllProductsAndMovements = widget.getAllProductsAndMovements;
   }
 
   @override
@@ -322,7 +322,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
         await ProductService.updateProduct(newProduct, newProduct.productId!);
       }
 
-      getAllProducts();
+      getAllProductsAndMovements();
       closeDialog();
     } catch (e) {
       debugPrint('Erro ao salvar produto: $e');
@@ -333,7 +333,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
     try {
       await ProductService.deleteProduct(product!.productId!);
 
-      getAllProducts();
+      getAllProductsAndMovements();
       closeDialog();
     } catch (e) {
       debugPrint('Erro ao salvar produto: $e');
