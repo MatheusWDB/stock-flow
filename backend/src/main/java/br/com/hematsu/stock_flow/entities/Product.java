@@ -24,9 +24,9 @@ public class Product implements Serializable {
     private String name;
     private String description;
 
-    @Column(unique = true) 
+    @Column(unique = true)
     private String code;
-    
+
     private Double costPrice;
     private Double salePrice;
     private Integer stockQuantity;
@@ -109,6 +109,7 @@ public class Product implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((productId == null) ? 0 : productId.hashCode());
+        result = prime * result + ((code == null) ? 0 : code.hashCode());
         return result;
     }
 
@@ -125,6 +126,11 @@ public class Product implements Serializable {
             if (other.productId != null)
                 return false;
         } else if (!productId.equals(other.productId))
+            return false;
+        if (code == null) {
+            if (other.code != null)
+                return false;
+        } else if (!code.equals(other.code))
             return false;
         return true;
     }

@@ -53,17 +53,18 @@ public class ProductController {
     @PostMapping("/{userId}")
     public ResponseEntity<Void> createProduct(@PathVariable Long userId, @RequestBody ProductDTO productDTO) {
         Product newProduct = productMapper.toEntity(productDTO);
-        newProduct = productService.save(newProduct);
+        newProduct = productService.save(newProduct, "create");
 
         Set<Category> categories = categoryService.findOrCreateCategories(productDTO.getCategories());
-        
+
         newProduct.getCategories().addAll(categories);
 
-        newProduct = productService.save(newProduct);
+        newProduct = productService.save(newProduct, "update");
 
         User user = userService.findById(userId);
 
-        StockMovement movement = new StockMovement(TypeEnum.IN.getCode(), newProduct.getStockQuantity(), newProduct, user);
+        StockMovement movement = new StockMovement(TypeEnum.IN.getCode(), newProduct.getStockQuantity(), newProduct,
+                user);
 
         stockMovementService.save(movement);
 
@@ -78,11 +79,11 @@ public class ProductController {
     @PutMapping("/{productId}")
     public ResponseEntity<Void> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO productDTO) {
 
-        Product updatedProduct = productService.findById(productId);
+        Product updatedProduct = productService.update(productDTO);
 
         Set<Category> categories = categoryService.findOrCreateCategories(productDTO.getCategories());
 
-        productService.save(productDTO.toEntityForUpdate(updatedProduct, categories));
+        productService.save(productDTO.toEntityForUpdate(updatedProduct, categories), "update");
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

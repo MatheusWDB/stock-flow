@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.hematsu.stock_flow.entities.User;
+import br.com.hematsu.stock_flow.exceptions.user.InvalidCredentialsException;
+import br.com.hematsu.stock_flow.exceptions.user.UserAlreadyExistsException;
 import br.com.hematsu.stock_flow.repositories.UserRepository;
 
 @Service
@@ -22,15 +24,28 @@ public class UserService {
     }
 
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidCredentialsException("Email não cadastrado!"));
     }
 
-    public User crypt(User user) {
+    public User hashUserPassword(User user) {
         String bcryptHashString = BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray());
 
         user.setPassword(bcryptHashString);
 
         return user;
+    }
+
+    public void emailExists(String email) {
+        userRepository.findByEmail(email).orElseThrow(() -> new UserAlreadyExistsException());
+    }
+
+    public void checkPassword(String password, String bcryptHash) {
+        BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), bcryptHash);
+
+        if (!result.verified) {
+            throw new InvalidCredentialsException("Senha incorreta!");
+        }
     }
 
 }

@@ -43,9 +43,9 @@ public class StockMovementController {
 
         StockMovement newMovement = stockMovementeMapper.toEntity(movementDTO, product, user);
 
-        stockMovementService.save(newMovement);
-
         productService.updateStockQuantity(newMovement.getType(), newMovement.getQuantity(), product);
+        
+        stockMovementService.save(newMovement);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

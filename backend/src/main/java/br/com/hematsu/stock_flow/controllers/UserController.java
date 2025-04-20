@@ -13,7 +13,6 @@ import br.com.hematsu.stock_flow.entities.User;
 import br.com.hematsu.stock_flow.mappers.UserMapper;
 import br.com.hematsu.stock_flow.services.UserService;
 
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -26,9 +25,11 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Void> registerUser(@RequestBody UserDTO userDTO) {
+        userService.emailExists(userDTO.getEmail());
+
         User newUser = userMapper.toEntity(userDTO);
 
-        newUser = userService.crypt(newUser);
+        newUser = userService.hashUserPassword(newUser);
 
         userService.save(newUser);
 
@@ -36,10 +37,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> loginUser(@RequestBody UserDTO userDTO) {
-        UserDTO user = userMapper.toDTO(userService.findByEmail(userDTO.getEmail()));
+    public ResponseEntity<User> login(@RequestBody UserDTO userDTO) {        
+        User user = userService.findByEmail(userDTO.getEmail());
+
+        userService.checkPassword(userDTO.getPassword(), user.getPassword());
+
+        //gerar token e devolver
+
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
-    
 
 }
