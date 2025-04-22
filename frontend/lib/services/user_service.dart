@@ -20,7 +20,7 @@ class UserService {
 
   static Future<User> login(User user) async {
     final response = await http.post(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(user.toJson()),
     );

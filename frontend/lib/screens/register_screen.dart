@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
-import 'package:frontend/screens/dashboard_screen.dart';
-import 'package:frontend/screens/register_screen.dart';
 import 'package:frontend/services/user_service.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   Map<String, TextEditingController> controller = {
+    'name': TextEditingController(),
     'email': TextEditingController(),
     'password': TextEditingController(),
+    'confirmPassword': TextEditingController(),
   };
   Map<String, String?> error = {
+    'name': null,
     'email': null,
     'password': null,
+    'confirmPassword': null,
   };
 
   bool viewPassword = false;
+  bool viewConfirmPassword = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Register'),
       ),
       body: SafeArea(
         child: Padding(
@@ -38,6 +41,24 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               TextField(
                 autofocus: true,
+                controller: controller['name'],
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  errorText: error['name'],
+                  labelText: 'Nome',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    error['name'] = null;
+                  });
+                },
+              ),
+              TextField(
                 controller: controller['email'],
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -88,31 +109,55 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                 },
               ),
+              TextField(
+                autocorrect: false,
+                controller: controller['confirmPassword'],
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  errorText: error['confirmPassword'],
+                  labelText: 'Confirme a senha',
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        viewConfirmPassword = !viewConfirmPassword;
+                      });
+                    },
+                    icon: Icon(
+                      viewConfirmPassword == true
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                  ),
+                ),
+                obscureText: !viewConfirmPassword,
+                obscuringCharacter: '*',
+                onChanged: (value) {
+                  setState(() {
+                    error['password'] = null;
+                  });
+                },
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () => login(),
-                    child: const Text('Entrar'),
+                    onPressed: () => register(),
+                    child: const Text('Cadastrar'),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       resetController();
                       resetError();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterScreen(),
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
-                    child: const Text('Cadastrar'),
+                    child: const Text('Voltar'),
                   ),
                 ],
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('Esqueci a senha'),
               ),
             ],
           ),
@@ -121,8 +166,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void login() async {
-    final attributes = ['email', 'password'];
+  void register() async {
+    final attributes = ['name', 'email', 'password', 'confirmPassword'];
 
     for (var attribute in attributes) {
       if (controller[attribute]!.text.isEmpty) {
@@ -154,26 +199,30 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    if (controller['password']!.text != controller['confirmPassword']!.text) {
+      setState(() {
+        error['password'] = 'As senha não coincidem!';
+        error['confirmPassword'] = 'As senha não coincidem!';
+      });
+      return;
+    }
+
     final User user = User(
+      name: controller['name']!.text,
       email: controller['email']!.text,
       password: controller['password']!.text,
     );
 
     try {
-      await UserService.login(user);
+      await UserService.createUser(user);
       resetController();
       resetError();
 
       if (!mounted) return;
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const DashboardScreen(),
-        ),
-      );
+      Navigator.pop(context);
     } catch (e) {
-      debugPrint('Erro ao logar: $e');
+      debugPrint('Erro ao cadastrar: $e');
     }
   }
 
@@ -181,11 +230,15 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       controller['email']?.clear();
       controller['password']?.clear();
+      controller['name']?.clear();
+      controller['confirmPassword']?.clear();
     });
   }
 
   void resetError() {
     setState(() {
+      error['name'] = null;
+      error['confirmPassword'] = null;
       error['email'] = null;
       error['password'] = null;
     });
