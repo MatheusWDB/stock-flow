@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/product.dart';
 import 'package:frontend/models/stock_movement.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/screens/dashboard_screen.dart';
 import 'package:frontend/screens/movements_screen.dart';
 import 'package:frontend/screens/product_list_screen.dart';
@@ -8,12 +9,14 @@ import 'package:frontend/screens/product_list_screen.dart';
 class MainMenu extends StatelessWidget {
   const MainMenu({
     required this.currentRoute,
+    required this.user,
     required this.products,
     required this.movements,
     super.key,
   });
 
   final String currentRoute;
+  final User user;
   final List<Product> products;
   final List<StockMovement> movements;
 
@@ -29,7 +32,7 @@ class MainMenu extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const DashboardScreen(),
+                    builder: (context) => DashboardScreen(user: user),
                   ),
                 );
               },
@@ -44,6 +47,7 @@ class MainMenu extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ProductListScreen(
+                      user: user,
                       products: products,
                       movements: movements,
                     ),
@@ -61,8 +65,9 @@ class MainMenu extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MovementsScreen(
-                      movements: movements,
+                      user: user,
                       products: products,
+                      movements: movements,
                     ),
                   ),
                 );

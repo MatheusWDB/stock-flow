@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 class ProductService {
   static const String baseUrl = 'http://10.0.2.2:8080/products';
 
-  static Future<void> createProduct(Product product) async {
+  static Future<void> createProduct(Product product, int id) async {
     final response = await http.post(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/$id'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(product.toJson()),
     );

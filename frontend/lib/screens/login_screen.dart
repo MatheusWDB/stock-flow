@@ -154,13 +154,13 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    final User user = User(
+    User user = User(
       email: controller['email']!.text,
       password: controller['password']!.text,
     );
 
     try {
-      await UserService.login(user);
+      user = await UserService.login(user);
       resetController();
       resetError();
 
@@ -169,7 +169,9 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const DashboardScreen(),
+          builder: (context) => DashboardScreen(
+            user: user,
+          ),
         ),
       );
     } catch (e) {

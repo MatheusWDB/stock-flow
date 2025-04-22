@@ -6,29 +6,27 @@ import 'package:frontend/services/product_service.dart';
 class ProductFormDialog extends StatefulWidget {
   const ProductFormDialog({
     required this.getAllProductsAndMovements,
+    required this.userId,
     super.key,
     this.product,
     this.index,
   });
 
+  final int userId;
+  final Function() getAllProductsAndMovements;
   final Product? product;
   final int? index;
-  final Function() getAllProductsAndMovements;
 
   @override
   State<ProductFormDialog> createState() => _ProductFormDialogState();
 }
 
 class _ProductFormDialogState extends State<ProductFormDialog> {
-  late Product? product;
-  late int? index;
-  late Map<String, dynamic> controller;
-  late Map<String, dynamic> error;
-  late Function() getAllProductsAndMovements;
-
   @override
   void initState() {
     super.initState();
+    userId = widget.userId;
+    getAllProductsAndMovements = widget.getAllProductsAndMovements;
     product = widget.product;
     index = widget.index;
     controller = {
@@ -56,8 +54,14 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
           ? List.generate(product!.categories.length, (value) => null)
           : [null],
     };
-    getAllProductsAndMovements = widget.getAllProductsAndMovements;
   }
+
+  late int userId;
+  late Function() getAllProductsAndMovements;
+  late Product? product;
+  late int? index;
+  late Map<String, dynamic> controller;
+  late Map<String, dynamic> error;
 
   @override
   Widget build(BuildContext context) {
@@ -317,7 +321,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
 
     try {
       if (newProduct.productId == null) {
-        await ProductService.createProduct(newProduct);
+        await ProductService.createProduct(newProduct, userId);
       } else {
         await ProductService.updateProduct(newProduct, newProduct.productId!);
       }

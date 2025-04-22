@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/product.dart';
 import 'package:frontend/models/stock_movement.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/services/product_service.dart';
 import 'package:frontend/services/stock_movement_service.dart';
 import 'package:frontend/widgets/main_menu.dart';
@@ -8,7 +9,8 @@ import 'package:frontend/widgets/movements_chart.dart';
 import 'package:intl/intl.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  const DashboardScreen({required this.user, super.key});
+  final User user;
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -20,8 +22,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     getAllProducts();
     getAllStockMovements();
+    user = widget.user;
   }
 
+  late User user;
   List<Product> products = [];
   List<StockMovement> movements = [];
   StockMovement? latestMovement;
@@ -35,10 +39,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         body: Column(
           children: [
-            MainMenu(
-              currentRoute: '/dashboard',
-              movements: movements,
-              products: products,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MainMenu(
+                currentRoute: '/dashboard',
+                user: user,
+                products: products,
+                movements: movements,
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

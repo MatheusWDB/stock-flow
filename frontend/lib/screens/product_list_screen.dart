@@ -2,6 +2,7 @@ import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/product.dart';
 import 'package:frontend/models/stock_movement.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/services/product_service.dart';
 import 'package:frontend/services/stock_movement_service.dart';
 import 'package:frontend/widgets/main_menu.dart';
@@ -10,11 +11,13 @@ import 'package:intl/intl.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({
+    required this.user,
     required this.products,
     required this.movements,
     super.key,
   });
 
+  final User user;
   final List<Product> products;
   final List<StockMovement> movements;
 
@@ -26,14 +29,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   void initState() {
     super.initState();
-    movements = widget.movements;
+    user = widget.user;
     products = widget.products;
+    movements = widget.movements;
   }
 
-  final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
-
+  late User user;
   List<Product> products = [];
   List<StockMovement> movements = [];
+
+  final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
   TextEditingController nameOrCodeFilter = TextEditingController();
   String categoryFilter = 'All';
@@ -57,6 +62,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
             children: [
               MainMenu(
                 currentRoute: '/products',
+                user: user,
                 products: products,
                 movements: movements,
               ),
@@ -227,12 +233,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
       builder: (context) {
         if (product != null && index != null) {
           return ProductFormDialog(
+            userId: user.userId!,
+            getAllProductsAndMovements: getAllProductsAndMovements,
             product: product,
             index: index,
-            getAllProductsAndMovements: getAllProductsAndMovements,
           );
         } else {
           return ProductFormDialog(
+            userId: user.userId!,
             getAllProductsAndMovements: getAllProductsAndMovements,
           );
         }
