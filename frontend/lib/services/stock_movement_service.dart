@@ -6,9 +6,9 @@ import 'package:http/http.dart' as http;
 class StockMovementService {
   static const String baseUrl = 'http://10.0.2.2:8080/stock-movements';
 
-  static Future<void> createStockMovement(StockMovement movement) async {
+  static Future<void> createStockMovement(StockMovement movement, int userId) async {
     final response = await http.post(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/$userId'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(movement.toJson()),
     );

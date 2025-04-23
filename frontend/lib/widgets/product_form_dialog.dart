@@ -79,7 +79,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
         ),
         TextButton(
           onPressed: () {
-            final attributes = [
+            final List<String> attributes = [
               'name',
               'code',
               'costPrice',
@@ -87,7 +87,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
               'stockQuantity'
             ];
 
-            for (var attribute in attributes) {
+            for (String attribute in attributes) {
               if (controller[attribute]!.text.isEmpty) {
                 setState(() {
                   error[attribute] = 'Campo requerido';

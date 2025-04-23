@@ -3,20 +3,20 @@ import 'package:frontend/models/user.dart';
 
 class StockMovement {
   StockMovement({
-    required this.stockMovementId,
-    required this.date,
     required this.type,
     required this.quantity,
     required this.productId,
-    required this.user,
+    this.user,
+    this.stockMovementId,
+    this.date,
   });
 
-  int stockMovementId;
-  DateTime date;
+  int? stockMovementId;
+  DateTime? date;
   TypeEnum type;
   int quantity;
   int productId;
-  User user;
+  User? user;
 
   factory StockMovement.fromJson(Map<String, dynamic> json) {
     return StockMovement(
@@ -30,9 +30,8 @@ class StockMovement {
   }
 
   Map<String, dynamic> toJson() => {
-        'type': type.name,
+        'type': type.code,
         'quantity': quantity,
         'productId': productId,
-        'user': user.toJson(),
       };
 }

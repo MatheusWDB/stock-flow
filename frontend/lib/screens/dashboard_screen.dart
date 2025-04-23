@@ -73,7 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      'Última movimentação\n${latestMovement != null ? DateFormat("dd/MM/yyyy - HH:mm").format(latestMovement!.date.toLocal()) : 'Nenhuma'}',
+                      'Última movimentação\n${latestMovement != null ? DateFormat("dd/MM/yyyy - HH:mm").format(latestMovement!.date!.toLocal()) : 'Nenhuma'}',
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -107,7 +107,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       setState(() {
         movements = result;
         latestMovement =
-            movements.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+            movements.reduce((a, b) => a.date!.isAfter(b.date!) ? a : b);
       });
     } catch (e) {
       debugPrint('Erro ao buscar os registros de movimentação: $e');

@@ -31,7 +31,7 @@ class _MovementsChartState extends State<MovementsChart> {
 
     for (StockMovement movement in movements) {
       chartData.add({
-        'date': formatter.format(movement.date.toLocal()),
+        'date': formatter.format(movement.date!.toLocal()),
         'type': movement.type.name,
         'quantity': movement.quantity,
       });
