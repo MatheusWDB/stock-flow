@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/enums/type_enum.dart';
+import 'package:frontend/enums/type_enum.dart';
 import 'package:frontend/models/product.dart';
 import 'package:frontend/models/stock_movement.dart';
 import 'package:frontend/services/stock_movement_service.dart';

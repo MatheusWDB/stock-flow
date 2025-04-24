@@ -25,7 +25,7 @@ class MainMenu extends StatelessWidget {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
               onPressed: () {
@@ -75,13 +75,6 @@ class MainMenu extends StatelessWidget {
               child: Text(
                 'Movimentações',
                 style: style('/movements'),
-              ),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                'Relatórios',
-                style: style('/reports'),
               ),
             ),
           ],

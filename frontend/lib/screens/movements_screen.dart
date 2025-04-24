@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/enums/type_enum.dart';
+import 'package:frontend/enums/type_enum.dart';
 import 'package:frontend/models/product.dart';
 import 'package:frontend/models/stock_movement.dart';
 import 'package:frontend/models/user.dart';
@@ -170,13 +170,15 @@ class _MovementsScreenState extends State<MovementsScreen> {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () => showFormMovement(),
-                    label: Icon(Icons.add),
-                  ),
-                ],
+              ElevatedButton(
+                onPressed: () => showFormMovement(),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.add),
+                    Text('Registrar Movimentação'),
+                  ],
+                ),
               )
             ],
           ),

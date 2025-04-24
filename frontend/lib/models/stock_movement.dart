@@ -1,4 +1,4 @@
-import 'package:frontend/models/enums/type_enum.dart';
+import 'package:frontend/enums/type_enum.dart';
 import 'package:frontend/models/user.dart';
 
 class StockMovement {
