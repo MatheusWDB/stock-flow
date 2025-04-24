@@ -1,5 +1,6 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/enums/sort_enum.dart';
 import 'package:frontend/models/product.dart';
 import 'package:frontend/models/stock_movement.dart';
 import 'package:frontend/models/user.dart';
@@ -41,8 +42,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
   final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
   TextEditingController nameOrCodeFilter = TextEditingController();
+  SortEnum sort = SortEnum.productName;
   String categoryFilter = 'All';
-  Function(Product product) selector = (p) => p.code;
   bool ascending = true;
 
   @override
@@ -66,43 +67,87 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 products: products,
                 movements: movements,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: Column(
-                  children: [
-                    TextField(
-                      onChanged: (value) => setState(() {}),
-                      controller: nameOrCodeFilter,
-                      decoration: const InputDecoration(
-                        suffixIcon: Icon(Icons.search),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                        labelText: 'Pesquisar',
-                        errorText: null,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(),
-                        ),
+              Column(
+                spacing: 8,
+                children: [
+                  TextField(
+                    onChanged: (value) => setState(() {}),
+                    controller: nameOrCodeFilter,
+                    decoration: InputDecoration(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.6,
+                      ),
+                      suffixIcon: const Icon(Icons.search),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      labelText: 'Pesquisar',
+                      errorText: null,
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide(),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => setState(() {
-                            selector = (p) => p.name;
-                            ascending = !ascending;
-                          }),
-                          child: const Text('Ordenar'),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PopupMenuButton(
+                        itemBuilder: (context) {
+                          return SortEnum.values.map((value) {
+                            return PopupMenuItem(
+                              value: value,
+                              child: Text(value.displayName),
+                            );
+                          }).toList();
+                        },
+                        onSelected: (value) => setState(() {
+                          final SortEnum oldValue = sort;
+                          sort = value;
+                          oldValue == value
+                              ? ascending = !ascending
+                              : ascending = true;
+                        }),
+                        child: Row(
+                          children: [
+                            Text('Ordenar por: ${sort.displayName}'),
+                            ascending
+                                ? const Icon(Icons.arrow_upward)
+                                : const Icon(Icons.arrow_downward),
+                          ],
                         ),
-                        ElevatedButton(
-                          onPressed: () => setState(() {
-                            categoryFilter = 'All';
-                          }),
-                          child: const Text('Filtrar'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      PopupMenuButton(
+                        itemBuilder: (context) {
+                          final Set<String> categories = <String>{};
+
+                          final List<PopupMenuItem<String>> categoryItems = [
+                            const PopupMenuItem(
+                              value: 'All',
+                              child: Text('Tudo'),
+                            ),
+                          ];
+
+                          categoryItems.addAll(products
+                              .expand((p) => p.categories)
+                              .where((cat) => categories.add(cat.name))
+                              .map(
+                                (cat) => PopupMenuItem(
+                                  value: cat.name,
+                                  child: Text(cat.name[0].toUpperCase() +
+                                      cat.name.substring(1)),
+                                ),
+                              )
+                              .toList());
+
+                          return categoryItems;
+                        },
+                        onSelected: (value) => setState(() {
+                          categoryFilter = value;
+                        }),
+                        child: Text(
+                            'Filtrar por: ${categoryFilter == 'All' ? 'Tudo' : categoryFilter[0].toUpperCase() + categoryFilter.substring(1)}'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               Flexible(
                 fit: FlexFit.tight,
@@ -185,9 +230,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ),
                 ),
               ),
-              ElevatedButton.icon(
+              ElevatedButton(
                 onPressed: () => showFormProduct(null, null),
-                label: const Icon(Icons.add),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.add),
+                    Text('Adiciona Produto'),
+                  ],
+                ),
               )
             ],
           ),
@@ -200,7 +251,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   List<Product> sortProducts(List<Product> products) {
     products.sort((a, b) {
-      final int result = selector(a).compareTo(selector(b));
+      final int result = switch (sort) {
+        SortEnum.productCode => a.code.compareTo(b.code),
+        SortEnum.productName => a.name.compareTo(b.name),
+        SortEnum.costPrice => a.costPrice.compareTo(b.costPrice),
+        SortEnum.salePrice => a.salePrice.compareTo(b.salePrice),
+        SortEnum.stockQuantity => a.stockQuantity.compareTo(b.stockQuantity),
+      };
       return ascending ? result : -result;
     });
     return products;
