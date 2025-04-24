@@ -32,47 +32,86 @@ class _MovementsChartState extends State<MovementsChart> {
     for (StockMovement movement in movements) {
       chartData.add({
         'date': formatter.format(movement.date!.toLocal()),
-        'type': movement.type.name,
+        'type': movement.type.displayName,
         'quantity': movement.quantity,
       });
     }
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      width: 350,
       height: 300,
       child: Chart(
+        padding: (_) => const EdgeInsets.fromLTRB(40, 5, 10, 40),
         data: chartData,
         variables: {
           'date': Variable(
             accessor: (Map map) => map['date'] as String,
           ),
-          'quantity': Variable(
-            accessor: (Map map) => map['quantity'] as num,
-          ),
           'type': Variable(
             accessor: (Map map) => map['type'] as String,
+          ),
+          'quantity': Variable(
+            accessor: (Map map) => map['quantity'] as num,
           ),
         },
         marks: [
           IntervalMark(
-            position: Varset('date') * Varset('quantity'),
+            position: Varset('date') * Varset('quantity') / Varset('type'),
             color: ColorEncode(
               variable: 'type',
               values: [Colors.green, Colors.red],
-              updaters: {
-                'entrada': {
-                  true: (cor) => Colors.green,
-                  false: (cor) => Colors.yellow,
-                },
-                'saída': {
-                  true: (cor) => Colors.red,
-                  false: (cor) => Colors.yellow,
-                },
-              },
             ),
+            size: SizeEncode(value: 10),
+            modifiers: [DodgeModifier(ratio: 0.05)],
           ),
         ],
+        coord: RectCoord(
+          horizontalRangeUpdater: Defaults.horizontalRangeEvent,
+        ),
         axes: [
-          Defaults.horizontalAxis,
+          Defaults.horizontalAxis..tickLine = TickLine(),
           Defaults.verticalAxis,
+        ],
+        selections: {
+          'tap': PointSelection(
+            variable: 'date',
+          )
+        },
+        //tooltip: TooltipGuide(multiTuples: true),
+        crosshair: CrosshairGuide(),
+        annotations: [
+          CustomAnnotation(
+              renderer: (_, size) => [
+                    CircleElement(
+                        center: const Offset(25, 290),
+                        radius: 5,
+                        style: PaintStyle(fillColor: Colors.green))
+                  ],
+              anchor: (p0) => const Offset(0, 0)),
+          TagAnnotation(
+            label: Label(
+              'Entrada',
+              LabelStyle(
+                  textStyle: Defaults.textStyle, align: Alignment.centerRight),
+            ),
+            anchor: (size) => const Offset(34, 290),
+          ),
+          CustomAnnotation(
+              renderer: (_, size) => [
+                    CircleElement(
+                        center: Offset(25 + size.width / 5, 290),
+                        radius: 5,
+                        style: PaintStyle(fillColor: Colors.red))
+                  ],
+              anchor: (p0) => const Offset(0, 0)),
+          TagAnnotation(
+            label: Label(
+              'Saída',
+              LabelStyle(
+                  textStyle: Defaults.textStyle, align: Alignment.centerRight),
+            ),
+            anchor: (size) => Offset(34 + size.width / 5, 290),
+          ),
         ],
       ),
     );
