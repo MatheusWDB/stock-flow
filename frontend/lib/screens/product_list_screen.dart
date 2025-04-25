@@ -6,6 +6,7 @@ import 'package:frontend/models/stock_movement.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/product_service.dart';
 import 'package:frontend/services/stock_movement_service.dart';
+import 'package:frontend/widgets/generate_pdf.dart';
 import 'package:frontend/widgets/main_menu.dart';
 import 'package:frontend/widgets/product_form_dialog.dart';
 import 'package:intl/intl.dart';
@@ -237,6 +238,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   children: [
                     Icon(Icons.add),
                     Text('Adiciona Produto'),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () =>
+                    GeneratePDF(products: products).generatePDFProduct(),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.add),
+                    Text('Gerar PDF'),
                   ],
                 ),
               )
