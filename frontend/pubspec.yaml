@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   path_provider: ^2.1.5
   intl: any
-  flutter_slidable: ^3.1.2
+  flutter_slidable: ^4.0.0
   shared_preferences: ^2.3.4
   flutter_launcher_icons: ^0.14.2
   flutter_localizations:
@@ -44,6 +44,8 @@ dependencies:
   graphic: ^2.5.1
   diacritic: ^0.1.3
   http: ^1.3.0
+  pdf: ^3.11.3
+  printing: ^5.14.2
 
 #flutter_launcher_icons:
   #android: true
