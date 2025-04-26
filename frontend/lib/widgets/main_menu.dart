@@ -5,6 +5,7 @@ import 'package:frontend/models/user.dart';
 import 'package:frontend/screens/dashboard_screen.dart';
 import 'package:frontend/screens/movements_screen.dart';
 import 'package:frontend/screens/product_list_screen.dart';
+import 'package:frontend/services/generate_pdf.dart';
 
 class MainMenu extends StatelessWidget {
   const MainMenu({
@@ -75,6 +76,16 @@ class MainMenu extends StatelessWidget {
               child: Text(
                 'Movimentações',
                 style: style('/movements'),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                return GeneratePDF(products: products, movements: movements)
+                    .generatePDFProduct();
+              },
+              child: Text(
+                'Registros',
+                style: style('/registers'),
               ),
             ),
           ],
