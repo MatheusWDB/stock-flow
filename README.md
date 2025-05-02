@@ -69,3 +69,10 @@ cd stock-flow/backend
 # executar o projeto
 ./mvnw spring-boot:run
 ```
+
+
+# Autor
+Matheus Wendell Dantas Bezerra
+
+- [LinkedIn](https://www.linkedin.com/in/mwdb1703)
+- [Portfólio](https://portfolio-vwy3.onrender.com/)
