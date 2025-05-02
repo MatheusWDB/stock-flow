@@ -39,7 +39,8 @@ public class UserService {
     public void emailExists(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
 
-        if (user != null) throw new UserAlreadyExistsException();
+        if (user != null)
+            throw new UserAlreadyExistsException();
     }
 
     public void checkPassword(String password, String bcryptHash) {
