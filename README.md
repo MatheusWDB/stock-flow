@@ -14,6 +14,13 @@
   - Lista de todos os produtos.
   - Lista de produtos com estoque baixo.
   - Lista de movimentações.
+ 
+# Layout
+| ![0](https://github.com/user-attachments/assets/8c28557f-bbf7-4e27-954f-18f5732f21eb) | ![1](https://github.com/user-attachments/assets/bb778d98-b173-4f05-a3b4-a0e9412ba757) | ![2](https://github.com/user-attachments/assets/f7ee5b9e-1d7c-4cf3-8965-a0159c3af79e) |
+|:-------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------:|
+| ![3](https://github.com/user-attachments/assets/fa7da7cf-b2ea-4c68-9899-e5b62db5d7f2) | ![4](https://github.com/user-attachments/assets/686ba23a-8d3c-4fd8-b9ff-8e23d65d9735) | ![5](https://github.com/user-attachments/assets/5378836e-ec7f-4bbe-befd-1b660e8747d8) |
+| ![6](https://github.com/user-attachments/assets/1a9bf516-3fe8-4bfe-b5da-64f5bb7e4e90) | ![7](https://github.com/user-attachments/assets/120729f1-8e54-4c39-a1e7-836e3748655b) | ![8](https://github.com/user-attachments/assets/f46515f0-d0ed-4634-987d-36e3c39683e1) |
+| ![9](https://github.com/user-attachments/assets/ad708aaf-8711-44c6-8bb1-345aa9f98c3b) | ![10](https://github.com/user-attachments/assets/acbabd15-70c0-4b97-a35f-173fea918f4b) | ![11](https://github.com/user-attachments/assets/e13482e6-badf-4b2e-9192-4d50c08eb1d2) |
 
 # Tecnologias utilizadas  
 ## Frontend
