@@ -45,7 +45,9 @@
 
 # Como executar o projeto  
 ## Frontend  
-Pré-requisitos: Flutter e emulador andorid instalado e aberto
+### Pré-requisitos: 
+- Flutter
+- Emulador android
 
 ```bash
 # clonar repositório
@@ -62,7 +64,10 @@ flutter run
 ```
 
 ## Backend  
-Pré-requisitos: Java 21
+### Pré-requisitos: 
+- Java 21
+- Configurar .env
+
 ```bash
 # clonar repositório
 git clone https://github.com/MatheusWDB/stock-flow.git
@@ -79,7 +84,6 @@ cd stock-flow/backend
 
 
 # Autor
-Matheus Wendell Dantas Bezerra
-
+## Matheus Wendell Dantas Bezerra
 - [LinkedIn](https://www.linkedin.com/in/mwdb1703)
 - [Portfólio](https://portfolio-vwy3.onrender.com/)
