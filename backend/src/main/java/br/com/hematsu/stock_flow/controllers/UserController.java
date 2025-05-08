@@ -59,11 +59,12 @@ public class UserController {
 
         Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
+        Long userId = ((User) auth.getPrincipal()).getUserId();
+        String name = ((User) auth.getPrincipal()).getName();
+        String username = ((User) auth.getPrincipal()).getUsername();
         String token = tokenService.generateToken((User) auth.getPrincipal());
 
-        //System.out.println((User) auth.getPrincipal());
-
-        return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDTO(token));
+        return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDTO(token, userId, name, username));
     }
 
 }

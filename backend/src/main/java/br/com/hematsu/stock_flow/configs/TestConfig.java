@@ -38,7 +38,7 @@ public class TestConfig implements CommandLineRunner {
         @Override
         public void run(String... args) throws Exception {
                 // Criar usuário
-                User user = new User("a@a.a", BCrypt.withDefaults().hashToString(12, "12345678".toCharArray()),
+                User user = new User("teste@gmail.com", BCrypt.withDefaults().hashToString(12, "12345678".toCharArray()),
                                 "Usuário Teste", UserRole.ADMIN);
                 user = userRepository.save(user);
 
