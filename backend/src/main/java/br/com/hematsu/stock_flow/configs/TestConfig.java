@@ -14,6 +14,7 @@ import br.com.hematsu.stock_flow.entities.Product;
 import br.com.hematsu.stock_flow.entities.StockMovement;
 import br.com.hematsu.stock_flow.entities.User;
 import br.com.hematsu.stock_flow.enums.TypeEnum;
+import br.com.hematsu.stock_flow.enums.UserRole;
 import br.com.hematsu.stock_flow.repositories.CategoryRepository;
 import br.com.hematsu.stock_flow.repositories.ProductRepository;
 import br.com.hematsu.stock_flow.repositories.StockMovementRepository;
@@ -37,8 +38,8 @@ public class TestConfig implements CommandLineRunner {
         @Override
         public void run(String... args) throws Exception {
                 // Criar usuário
-                User user = new User(null, BCrypt.withDefaults().hashToString(12, "12345678".toCharArray()), "a@a.a",
-                                "Usuário Teste");
+                User user = new User("a@a.a", BCrypt.withDefaults().hashToString(12, "12345678".toCharArray()),
+                                "Usuário Teste", UserRole.ADMIN);
                 user = userRepository.save(user);
 
                 // Criar categorias
@@ -55,7 +56,7 @@ public class TestConfig implements CommandLineRunner {
                                                 catEsporte));
 
                 // Produtos e movimentações
-                Product p1 = new Product(
+                Product p1 = new Product(null,
                                 "Cropped Listrado Feminino",
                                 "Cropped feminino com estampa listrada, tecido leve e confortável.",
                                 "CRP-STR-003", 25.90, 59.90, 120);
@@ -63,7 +64,7 @@ public class TestConfig implements CommandLineRunner {
                 productRepository.save(p1);
                 movementRepository.save(new StockMovement(TypeEnum.IN.getCode(), 15550, p1, user));
 
-                Product p2 = new Product(
+                Product p2 = new Product(null,
                                 "Bermuda Masculina Moletom",
                                 "Bermuda esportiva masculina, ideal para o dia a dia.",
                                 "BRM-MOL-102", 35.00, 79.90, 80);
@@ -71,7 +72,7 @@ public class TestConfig implements CommandLineRunner {
                 productRepository.save(p2);
                 movementRepository.save(new StockMovement(TypeEnum.IN.getCode(), 6500, p2, user));
 
-                Product p3 = new Product(
+                Product p3 = new Product(null,
                                 "Jaqueta Corta Vento Feminina",
                                 "Jaqueta leve ideal para ventos e dias frios.",
                                 "JKT-VNT-020", 49.90, 129.90, 45);
@@ -79,7 +80,7 @@ public class TestConfig implements CommandLineRunner {
                 productRepository.save(p3);
                 movementRepository.save(new StockMovement(TypeEnum.IN.getCode(), 12000, p3, user));
 
-                Product p4 = new Product(
+                Product p4 = new Product(null,
                                 "Camisa Polo Masculina",
                                 "Camisa polo básica, perfeita para eventos informais.",
                                 "CMS-PLM-450", 28.90, 89.90, 65);
@@ -87,7 +88,7 @@ public class TestConfig implements CommandLineRunner {
                 productRepository.save(p4);
                 movementRepository.save(new StockMovement(TypeEnum.IN.getCode(), 7500, p4, user));
 
-                Product p5 = new Product(
+                Product p5 = new Product(null,
                                 "Legging Esportiva Feminina",
                                 "Calça legging com tecido respirável e elástico.",
                                 "LGG-ESP-011", 32.50, 99.90, 150);

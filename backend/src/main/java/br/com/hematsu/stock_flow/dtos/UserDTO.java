@@ -1,56 +1,15 @@
 package br.com.hematsu.stock_flow.dtos;
 
 import br.com.hematsu.stock_flow.entities.User;
+import br.com.hematsu.stock_flow.enums.UserRole;
 
-public class UserDTO {
-    private String username;
-    private String password;
-    private String email;
-    private String name;
-
-    public UserDTO() {
-    }
+public record UserDTO(String username, String password, String name, UserRole role) {
 
     public UserDTO(User user) {
-        this.email = user.getEmail();
-        this.name = user.getName();
+        this(
+                user.getUsername(),
+                user.getPassword(),
+                user.getName(),
+                user.getRole());
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "UserDTO [username=" + username + ", password=" + password + ", email=" + email + ", name=" + name + "]";
-    }
-
 }

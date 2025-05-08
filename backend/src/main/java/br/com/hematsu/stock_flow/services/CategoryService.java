@@ -19,12 +19,10 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Transactional
     public List<Category> findAll() {
         return categoryRepository.findAll();
     }
 
-    @Transactional
     public Category findByName(String name) {
         return categoryRepository.findByName(name).orElse(null);
     }
@@ -39,10 +37,10 @@ public class CategoryService {
 
         for (InnerCategoryDTO category : categories) {
 
-            Category existing = findByName(category.getName());
+            Category existing = findByName(category.name());
 
             if (existing == null) {
-                existing = save(new Category(category.getName()));
+                existing = save(new Category(category.name()));
             }
 
             updatedCategories.add(existing);

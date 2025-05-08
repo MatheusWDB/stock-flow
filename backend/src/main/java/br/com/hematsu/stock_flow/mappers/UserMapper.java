@@ -13,7 +13,7 @@ public class UserMapper {
     }
 
     public User toEntity(UserDTO userDTO) {
-        return new User(userDTO.getUsername(), userDTO.getPassword(), userDTO.getEmail(), userDTO.getName());
+        return new User(userDTO.username(), userDTO.password(), userDTO.name(), userDTO.role());
     }
 
 }

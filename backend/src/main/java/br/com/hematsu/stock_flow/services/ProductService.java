@@ -14,6 +14,7 @@ import br.com.hematsu.stock_flow.enums.TypeEnum;
 import br.com.hematsu.stock_flow.exceptions.movement.InvalidMovementTypeException;
 import br.com.hematsu.stock_flow.exceptions.product.DuplicateProductCodeException;
 import br.com.hematsu.stock_flow.exceptions.product.InvalidProductPriceException;
+import br.com.hematsu.stock_flow.exceptions.product.ProductHasMovementsException;
 import br.com.hematsu.stock_flow.exceptions.product.ProductNotFoundException;
 import br.com.hematsu.stock_flow.repositories.ProductRepository;
 
@@ -43,43 +44,55 @@ public class ProductService {
     @Transactional
     public List<ProductDTO> findAll() {
         List<Product> products = productRepository.findAll();
+
         for (Product product : products) {
             Hibernate.initialize(product.getCategories());
         }
+
         return products.stream().map(ProductDTO::new).toList();
     }
 
     @Transactional
     public Product findById(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException());
+
         Hibernate.initialize(product.getCategories());
+
         return product;
-    }
-
-    public Product update(ProductDTO product) {
-        Product product1 = findById(product.getProductId());
-        Product product2 = findByCode(product.getCode());
-
-        if (!product1.equals(product2)) {
-            throw new DuplicateProductCodeException();
-        }
-
-        return product1;
     }
 
     @Transactional
     public void deleteById(Long productId) {
         Product product = findById(productId);
+
         List<StockMovement> movements = stockMovementService.findByProduct(product);
 
-        if (movements.isEmpty()) {
-            productRepository.deleteById(productId);
+        if (!movements.isEmpty()) {
+            throw new ProductHasMovementsException();
         }
 
+        productRepository.deleteById(productId);
     }
 
+    @Transactional
     public Product findByCode(String code) {
-        return productRepository.findByCode(code).orElse(null);
+        Product product = productRepository.findByCode(code).orElse(null);
+
+        return product;
+    }
+
+    @Transactional
+    public void hasCodeChanged(ProductDTO product) {
+        Product product1 = findById(product.productId());
+        Product product2 = findByCode(product.code());
+
+        if (product2 == null){
+            throw new ProductNotFoundException();
+        }
+
+        if (!product1.equals(product2)) {
+            throw new DuplicateProductCodeException();
+        }
     }
 
     public void updateStockQuantity(TypeEnum type, Integer quantity, Product product) {

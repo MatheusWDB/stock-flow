@@ -39,7 +39,7 @@ public class StockMovementController {
     public ResponseEntity<Void> createStockMovement(@PathVariable Long userId,
             @RequestBody StockMovementDTO movementDTO) {
         User user = userService.findById(userId);
-        Product product = productService.findById(movementDTO.getProductId());
+        Product product = productService.findById(movementDTO.productId());
 
         StockMovement newMovement = stockMovementeMapper.toEntity(movementDTO, product, user);
 

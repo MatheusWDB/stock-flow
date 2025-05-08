@@ -3,15 +3,22 @@ package br.com.hematsu.stock_flow.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.hematsu.stock_flow.dtos.UserDTO;
+import br.com.hematsu.stock_flow.dtos.UserResponseDTO;
 import br.com.hematsu.stock_flow.entities.User;
 import br.com.hematsu.stock_flow.mappers.UserMapper;
+import br.com.hematsu.stock_flow.services.TokenService;
 import br.com.hematsu.stock_flow.services.UserService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -23,13 +30,22 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
-    @PostMapping
-    public ResponseEntity<Void> registerUser(@RequestBody UserDTO userDTO) {
-        userService.emailExists(userDTO.getEmail());
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @PostMapping("register")
+    public ResponseEntity<Void> registerUser(@RequestBody @Valid UserDTO userDTO) {
+
+        userService.emailExists(userDTO.username());
 
         User newUser = userMapper.toEntity(userDTO);
 
-        newUser = userService.hashUserPassword(newUser);
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
+
+        newUser.setPassword(encryptedPassword);
 
         userService.save(newUser);
 
@@ -37,14 +53,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody UserDTO userDTO) {        
-        User user = userService.findByEmail(userDTO.getEmail());
+    public ResponseEntity<UserResponseDTO> login(@RequestBody @Valid UserDTO userDTO) {
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+                userDTO.username(), userDTO.password());
 
-        userService.checkPassword(userDTO.getPassword(), user.getPassword());
+        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
-        //gerar token e devolver
+        String token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        //System.out.println((User) auth.getPrincipal());
+
+        return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDTO(token));
     }
 
 }

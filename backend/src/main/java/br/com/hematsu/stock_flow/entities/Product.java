@@ -38,8 +38,9 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(String name, String description, String code, Double costPrice, Double salePrice,
+    public Product(Long productId, String name, String description, String code, Double costPrice, Double salePrice,
             Integer stockQuantity) {
+        this.productId = productId;
         this.name = name;
         this.description = description;
         this.code = code;

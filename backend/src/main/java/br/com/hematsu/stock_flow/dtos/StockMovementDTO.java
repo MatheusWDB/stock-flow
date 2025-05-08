@@ -6,110 +6,24 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.hematsu.stock_flow.entities.StockMovement;
 
-public class StockMovementDTO {
-    private Long stockMovementId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT-03:00")
-    private Instant date;
-    private Integer type;
-    private Integer quantity;
-    private Long productId;
-    private InnerUserDTO user;
-
-    public StockMovementDTO() {
-    }
+public record StockMovementDTO(
+        Long stockMovementId,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT-03:00") Instant date,
+        Integer type, Integer quantity,
+        Long productId, InnerUserDTO user) {
 
     public StockMovementDTO(StockMovement stockMovement) {
-        this.stockMovementId = stockMovement.getStockMovementId();
-        this.date = stockMovement.getDate();
-        this.type = stockMovement.getType().getCode();
-        this.quantity = stockMovement.getQuantity();
-        this.productId = stockMovement.getProduct().getProductId();
-        this.user = new InnerUserDTO(stockMovement.getUser().getEmail(), stockMovement.getUser().getName());
+        this(
+                stockMovement.getStockMovementId(),
+                stockMovement.getDate(),
+                stockMovement.getType().getCode(),
+                stockMovement.getQuantity(),
+                stockMovement.getProduct().getProductId(),
+                new InnerUserDTO(
+                        stockMovement.getUser().getUsername(),
+                        stockMovement.getUser().getName()));
     }
 
-    public Long getStockMovementId() {
-        return stockMovementId;
+    public record InnerUserDTO(String username, String name) {
     }
-
-    public void setStockMovementId(Long stockMovementId) {
-        this.stockMovementId = stockMovementId;
-    }
-
-    public Instant getDate() {
-        return date;
-    }
-
-    public void setDate(Instant date) {
-        this.date = date;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public InnerUserDTO getUser() {
-        return user;
-    }
-
-    public void setUser(InnerUserDTO user) {
-        this.user = user;
-    }
-
-    public static class InnerUserDTO {
-        private String email;
-        private String name;
-
-        public InnerUserDTO(String email, String name) {
-            this.email = email;
-            this.name = name;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return "InnerUserDTO [email=" + email + ", name=" + name + "]";
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "StockMovementDTO [stockMovementId=" + stockMovementId + ", date=" + date + ", type=" + type
-                + ", quantity=" + quantity + ", productId=" + productId + ", user=" + user + "]";
-    }
-
 }

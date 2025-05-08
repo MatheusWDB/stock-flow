@@ -13,9 +13,8 @@ public class ProductMapper {
     }
 
     public Product toEntity(ProductDTO productDTO) {
-        return new Product(productDTO.getName(), productDTO.getDescription(), productDTO.getCode(),
-                productDTO.getCostPrice(), productDTO.getSalePrice(), productDTO.getStockQuantity());
+        return new Product(productDTO.productId(), productDTO.name(), productDTO.description(), productDTO.code(),
+                productDTO.costPrice(), productDTO.salePrice(), productDTO.stockQuantity());
     }
-
 
 }
