@@ -32,7 +32,7 @@ class _MovementsScreenState extends State<MovementsScreen> {
     products = widget.products;
     movements = widget.movements;
   }
-
+  
   late User user;
   List<Product> products = [];
   List<StockMovement> movements = [];

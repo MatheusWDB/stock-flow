@@ -8,7 +8,7 @@ class UserService {
 
   static Future<void> createUser(User user) async {
     final response = await http.post(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/register'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(user.toJson()),
     );
@@ -18,7 +18,7 @@ class UserService {
     }
   }
 
-  static Future<User> login(User user) async {
+  static Future<void> login(User user) async {
     final response = await http.post(
       Uri.parse('$baseUrl/login'),
       headers: {'Content-Type': 'application/json'},
@@ -27,7 +27,8 @@ class UserService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return User.fromJson(data);
+      final loggedUser = User.fromJson(data);
+      User.currentUser = loggedUser;
     } else {
       throw Exception('Erro ao buscar usuário: ${response.statusCode}');
     }

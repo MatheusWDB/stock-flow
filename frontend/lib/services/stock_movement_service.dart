@@ -1,15 +1,20 @@
 import 'dart:convert';
 
 import 'package:frontend/models/stock_movement.dart';
+import 'package:frontend/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class StockMovementService {
   static const String baseUrl = 'http://10.0.2.2:8080/stock-movements';
 
-  static Future<void> createStockMovement(StockMovement movement, int userId) async {
+  static Future<void> createStockMovement(
+      StockMovement movement, int userId) async {
     final response = await http.post(
       Uri.parse('$baseUrl/$userId'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${User.currentUser!.token}'
+      },
       body: jsonEncode(movement.toJson()),
     );
 
@@ -21,7 +26,7 @@ class StockMovementService {
   static Future<List<StockMovement>> getAllStockMovemente() async {
     final response = await http.get(
       Uri.parse(baseUrl),
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Authorization': 'Bearer ${User.currentUser!.token}'},
     );
 
     if (response.statusCode == 200) {

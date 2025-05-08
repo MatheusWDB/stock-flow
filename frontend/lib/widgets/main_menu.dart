@@ -33,7 +33,7 @@ class MainMenu extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DashboardScreen(user: user),
+                    builder: (context) => const DashboardScreen(),
                   ),
                 );
               },

@@ -13,11 +13,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   Map<String, TextEditingController> controller = {
-    'email': TextEditingController(),
+    'username': TextEditingController(),
     'password': TextEditingController(),
   };
   Map<String, String?> error = {
-    'email': null,
+    'username': null,
     'password': null,
   };
 
@@ -30,99 +30,106 @@ class _LoginScreenState extends State<LoginScreen> {
         title: const Text('Login'),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(64.0),
-          child: Column(
-            spacing: 8,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                autofocus: true,
-                controller: controller['email'],
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  errorText: error['email'],
-                  labelText: 'Email',
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    error['email'] = null;
-                  });
-                },
-              ),
-              TextField(
-                autocorrect: false,
-                controller: controller['password'],
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  errorText: error['password'],
-                  labelText: 'Senha',
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        viewPassword = !viewPassword;
-                      });
-                    },
-                    icon: Icon(
-                      viewPassword == true
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                  ),
-                ),
-                obscureText: !viewPassword,
-                obscuringCharacter: '*',
-                onChanged: (value) {
-                  setState(() {
-                    error['password'] = null;
-                  });
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => login(),
-                    child: const Text('Entrar'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      resetController();
-                      resetError();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterScreen(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(64.0),
+                child: Column(
+                  spacing: 8,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextField(
+                      autofocus: true,
+                      controller: controller['username'],
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
                         ),
-                      );
-                    },
-                    child: const Text('Cadastrar'),
-                  ),
-                ],
+                        errorText: error['username'],
+                        labelText: 'Email',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          error['username'] = null;
+                        });
+                      },
+                    ),
+                    TextField(
+                      autocorrect: false,
+                      controller: controller['password'],
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        errorText: error['password'],
+                        labelText: 'Senha',
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              viewPassword = !viewPassword;
+                            });
+                          },
+                          icon: Icon(
+                            viewPassword == true
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                        ),
+                      ),
+                      obscureText: !viewPassword,
+                      obscuringCharacter: '*',
+                      onChanged: (value) {
+                        setState(() {
+                          error['password'] = null;
+                        });
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => login(),
+                          child: const Text('Entrar'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            resetController();
+                            resetError();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text('Cadastrar'),
+                        ),
+                      ],
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text('Esqueci a senha'),
+                    ),
+                  ],
+                ),
               ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('Esqueci a senha'),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   void login() async {
-    final attributes = ['email', 'password'];
+    final attributes = ['username', 'password'];
 
     for (var attribute in attributes) {
       if (controller[attribute]!.text.isEmpty) {
@@ -133,15 +140,15 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
 
-    if (!controller['email']!.text.contains('@') ||
-        !controller['email']!.text.contains('.')) {
-      final int atIndex = controller['email']!.text.indexOf('@');
-      final int dotIndex = controller['email']!.text.lastIndexOf('.');
+    if (!controller['username']!.text.contains('@') ||
+        !controller['username']!.text.contains('.')) {
+      final int atIndex = controller['username']!.text.indexOf('@');
+      final int dotIndex = controller['username']!.text.lastIndexOf('.');
       if (atIndex < 1 ||
           dotIndex < atIndex + 2 ||
-          dotIndex == controller['email']!.text.length - 1) {
+          dotIndex == controller['username']!.text.length - 1) {
         setState(() {
-          error['email'] = 'Inválido';
+          error['username'] = 'Inválido';
         });
         return;
       }
@@ -154,13 +161,13 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    User user = User(
-      email: controller['email']!.text,
+    final User user = User(
+      username: controller['username']!.text,
       password: controller['password']!.text,
     );
 
     try {
-      user = await UserService.login(user);
+      await UserService.login(user);
       resetController();
       resetError();
 
@@ -169,9 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => DashboardScreen(
-            user: user,
-          ),
+          builder: (context) => const DashboardScreen(),
         ),
       );
     } catch (e) {
@@ -181,14 +186,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void resetController() {
     setState(() {
-      controller['email']?.clear();
+      controller['username']?.clear();
       controller['password']?.clear();
     });
   }
 
   void resetError() {
     setState(() {
-      error['email'] = null;
+      error['username'] = null;
       error['password'] = null;
     });
   }

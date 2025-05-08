@@ -12,13 +12,13 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   Map<String, TextEditingController> controller = {
     'name': TextEditingController(),
-    'email': TextEditingController(),
+    'username': TextEditingController(),
     'password': TextEditingController(),
     'confirmPassword': TextEditingController(),
   };
   Map<String, String?> error = {
     'name': null,
-    'email': null,
+    'username': null,
     'password': null,
     'confirmPassword': null,
   };
@@ -33,141 +33,148 @@ class _RegisterScreenState extends State<RegisterScreen> {
         title: const Text('Register'),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(64.0),
-          child: Column(
-            spacing: 8,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                autofocus: true,
-                controller: controller['name'],
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 2,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(64.0),
+                child: Column(
+                  spacing: 8,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextField(
+                      autofocus: true,
+                      controller: controller['name'],
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        errorText: error['name'],
+                        labelText: 'Nome',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          error['name'] = null;
+                        });
+                      },
                     ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  errorText: error['name'],
-                  labelText: 'Nome',
+                    TextField(
+                      controller: controller['username'],
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        errorText: error['username'],
+                        labelText: 'Email',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          error['username'] = null;
+                        });
+                      },
+                    ),
+                    TextField(
+                      autocorrect: false,
+                      controller: controller['password'],
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        errorText: error['password'],
+                        labelText: 'Senha',
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              viewPassword = !viewPassword;
+                            });
+                          },
+                          icon: Icon(
+                            viewPassword == true
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                        ),
+                      ),
+                      obscureText: !viewPassword,
+                      obscuringCharacter: '*',
+                      onChanged: (value) {
+                        setState(() {
+                          error['password'] = null;
+                        });
+                      },
+                    ),
+                    TextField(
+                      autocorrect: false,
+                      controller: controller['confirmPassword'],
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        errorText: error['confirmPassword'],
+                        labelText: 'Confirme a senha',
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              viewConfirmPassword = !viewConfirmPassword;
+                            });
+                          },
+                          icon: Icon(
+                            viewConfirmPassword == true
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                        ),
+                      ),
+                      obscureText: !viewConfirmPassword,
+                      obscuringCharacter: '*',
+                      onChanged: (value) {
+                        setState(() {
+                          error['password'] = null;
+                        });
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => register(),
+                          child: const Text('Cadastrar'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            resetController();
+                            resetError();
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Voltar'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    error['name'] = null;
-                  });
-                },
               ),
-              TextField(
-                controller: controller['email'],
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  errorText: error['email'],
-                  labelText: 'Email',
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    error['email'] = null;
-                  });
-                },
-              ),
-              TextField(
-                autocorrect: false,
-                controller: controller['password'],
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  errorText: error['password'],
-                  labelText: 'Senha',
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        viewPassword = !viewPassword;
-                      });
-                    },
-                    icon: Icon(
-                      viewPassword == true
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                  ),
-                ),
-                obscureText: !viewPassword,
-                obscuringCharacter: '*',
-                onChanged: (value) {
-                  setState(() {
-                    error['password'] = null;
-                  });
-                },
-              ),
-              TextField(
-                autocorrect: false,
-                controller: controller['confirmPassword'],
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  errorText: error['confirmPassword'],
-                  labelText: 'Confirme a senha',
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        viewConfirmPassword = !viewConfirmPassword;
-                      });
-                    },
-                    icon: Icon(
-                      viewConfirmPassword == true
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                  ),
-                ),
-                obscureText: !viewConfirmPassword,
-                obscuringCharacter: '*',
-                onChanged: (value) {
-                  setState(() {
-                    error['password'] = null;
-                  });
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => register(),
-                    child: const Text('Cadastrar'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      resetController();
-                      resetError();
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Voltar'),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   void register() async {
-    final attributes = ['name', 'email', 'password', 'confirmPassword'];
+    final attributes = ['name', 'username', 'password', 'confirmPassword'];
 
     for (var attribute in attributes) {
       if (controller[attribute]!.text.isEmpty) {
@@ -178,15 +185,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     }
 
-    if (!controller['email']!.text.contains('@') ||
-        !controller['email']!.text.contains('.')) {
-      final int atIndex = controller['email']!.text.indexOf('@');
-      final int dotIndex = controller['email']!.text.lastIndexOf('.');
+    if (!controller['username']!.text.contains('@') ||
+        !controller['username']!.text.contains('.')) {
+      final int atIndex = controller['username']!.text.indexOf('@');
+      final int dotIndex = controller['username']!.text.lastIndexOf('.');
       if (atIndex < 1 ||
           dotIndex < atIndex + 2 ||
-          dotIndex == controller['email']!.text.length - 1) {
+          dotIndex == controller['username']!.text.length - 1) {
         setState(() {
-          error['email'] = 'Inválido';
+          error['username'] = 'Inválido';
         });
         return;
       }
@@ -209,7 +216,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final User user = User(
       name: controller['name']!.text,
-      email: controller['email']!.text,
+      username: controller['username']!.text,
       password: controller['password']!.text,
     );
 
@@ -228,7 +235,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void resetController() {
     setState(() {
-      controller['email']?.clear();
+      controller['username']?.clear();
       controller['password']?.clear();
       controller['name']?.clear();
       controller['confirmPassword']?.clear();
@@ -239,7 +246,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       error['name'] = null;
       error['confirmPassword'] = null;
-      error['email'] = null;
+      error['username'] = null;
       error['password'] = null;
     });
   }

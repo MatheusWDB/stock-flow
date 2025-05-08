@@ -267,42 +267,42 @@ class GeneratePDF {
           .map((p) => pw.TableRow(
                 children: [
                   pw.Padding(
-                    padding: pw.EdgeInsets.all(2),
+                    padding: const pw.EdgeInsets.all(2),
                     child: pw.Text(
                       p.productId.toString(),
                       textAlign: pw.TextAlign.center,
                     ),
                   ),
                   pw.Padding(
-                    padding: pw.EdgeInsets.all(2),
+                    padding: const pw.EdgeInsets.all(2),
                     child: pw.Text(
                       p.name,
                       textAlign: pw.TextAlign.center,
                     ),
                   ),
                   pw.Padding(
-                    padding: pw.EdgeInsets.all(2),
+                    padding: const pw.EdgeInsets.all(2),
                     child: pw.Text(
                       p.code,
                       textAlign: pw.TextAlign.center,
                     ),
                   ),
                   pw.Padding(
-                    padding: pw.EdgeInsets.all(2),
+                    padding: const pw.EdgeInsets.all(2),
                     child: pw.Text(
                       p.stockQuantity.toString(),
                       textAlign: pw.TextAlign.center,
                     ),
                   ),
                   pw.Padding(
-                    padding: pw.EdgeInsets.all(2),
+                    padding: const pw.EdgeInsets.all(2),
                     child: pw.Text(
                       currencyFormat.format(p.costPrice),
                       textAlign: pw.TextAlign.center,
                     ),
                   ),
                   pw.Padding(
-                    padding: pw.EdgeInsets.all(2),
+                    padding: const pw.EdgeInsets.all(2),
                     child: pw.Text(
                       currencyFormat.format(p.salePrice),
                       textAlign: pw.TextAlign.center,

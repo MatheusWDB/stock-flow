@@ -9,9 +9,7 @@ import 'package:frontend/widgets/movements_chart.dart';
 import 'package:intl/intl.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({required this.user, super.key});
-  final User user;
-
+  const DashboardScreen({super.key});
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
@@ -22,7 +20,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     getAllProducts();
     getAllStockMovements();
-    user = widget.user;
+    user = User.currentUser!;
   }
 
   late User user;

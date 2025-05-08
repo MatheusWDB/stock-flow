@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:frontend/models/product.dart';
+import 'package:frontend/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class ProductService {
@@ -8,7 +10,10 @@ class ProductService {
   static Future<void> createProduct(Product product, int id) async {
     final response = await http.post(
       Uri.parse('$baseUrl/$id'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${User.currentUser!.token}'
+      },
       body: jsonEncode(product.toJson()),
     );
 
@@ -18,7 +23,8 @@ class ProductService {
   }
 
   static Future<List<Product>> getAllProducts() async {
-    final response = await http.get(Uri.parse(baseUrl));
+    final response = await http.get(Uri.parse(baseUrl),
+        headers: {'Authorization': 'Bearer ${User.currentUser!.token}'});
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
@@ -31,7 +37,10 @@ class ProductService {
   static Future<void> updateProduct(Product product, int id) async {
     final response = await http.put(
       Uri.parse('$baseUrl/$id'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${User.currentUser!.token}'
+      },
       body: jsonEncode(product.toJson()),
     );
 
@@ -43,7 +52,10 @@ class ProductService {
   static Future<void> deleteProduct(int id) async {
     final response = await http.delete(
       Uri.parse('$baseUrl/$id'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${User.currentUser!.token}'
+      },
     );
 
     if (response.statusCode != 204) {
