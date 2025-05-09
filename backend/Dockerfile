@@ -2,10 +2,11 @@ FROM ubuntu:latest AS build
 
 RUN apt-get update
 RUN apt-get install openjdk-21-jdk -y
+ENV JWT_SECRET="OPFMABHHSKFT"
 COPY . .
 
 RUN apt-get install maven -y
-RUN mvn clean install -Dspring.profiles.active=${APP_PROFILE}
+RUN mvn clean install -Dspring.profiles.active=${APP_PROFILE} -Djwt.secret=${JWT_SECRET}
 
 FROM openjdk:21-jdk-slim
 
